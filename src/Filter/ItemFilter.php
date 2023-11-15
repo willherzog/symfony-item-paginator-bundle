@@ -16,7 +16,7 @@ interface ItemFilter
 	/**
 	 * Determine whether this filter can be used with the given $paginator.
 	 */
-	public function canBeUsedWith(ItemPaginator $paginator): bool;
+	public function supports(ItemPaginator $paginator): bool;
 
 	/**
 	 * Determine whether this filter is applicable to the current $request.

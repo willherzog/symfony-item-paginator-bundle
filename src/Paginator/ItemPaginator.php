@@ -88,7 +88,7 @@ abstract class ItemPaginator
 			throw new \LogicException('Filters have already been applied: filters can no longer be added.');
 		}
 
-		if( !$filter->canBeUsedWith($this) ) {
+		if( !$filter->supports($this) ) {
 			throw new \InvalidArgumentException(sprintf('Item filter of class "%s" cannot be used with item paginator of class "%s".', $filter::class, $this::class));
 		}
 

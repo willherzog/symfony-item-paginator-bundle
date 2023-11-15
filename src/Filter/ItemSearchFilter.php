@@ -35,7 +35,7 @@ class ItemSearchFilter implements ItemFilter, HasRequestQuery
 	/**
 	 * @inheritDoc
 	 */
-	public function canBeUsedWith(ItemPaginator $paginator): bool
+	public function supports(ItemPaginator $paginator): bool
 	{
 		return $paginator instanceof SearchableItemPaginator;
 	}
