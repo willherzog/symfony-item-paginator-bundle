@@ -97,6 +97,11 @@ abstract class ItemPaginator
 		return $this;
 	}
 
+	final public function getEntityReference(string $entityClass, int $entityId): object
+	{
+		return $this->entityManager->getReference($entityClass, $entityId);
+	}
+
 	/**
 	 * Add to item select statements; if none are added, the main item entity is hydrated as a whole.
 	 */
