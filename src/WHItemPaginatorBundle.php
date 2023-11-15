@@ -16,6 +16,8 @@ use WHSymfony\WHItemPaginatorBundle\Paginator\ItemPaginatorFactory;
  */
 class WHItemPaginatorBundle extends AbstractBundle
 {
+	protected string $extensionAlias = 'wh_paginator';
+
 	public function configure(DefinitionConfigurator $definition): void
 	{
 		$definition->rootNode()
