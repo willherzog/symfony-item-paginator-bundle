@@ -1,0 +1,1 @@
+			<button type="button" class="action {{ action_class }}" data-goto="{{ script_goto }}"{% if key is defined %} accesskey="{{ key }}"{% endif %}{% if add_action_tooltips|default(true) and tooltip is defined %} title="{{ tooltip|trans }}"{% endif %}>{{ label }}</button>

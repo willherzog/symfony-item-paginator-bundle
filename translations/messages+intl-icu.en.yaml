@@ -1,0 +1,22 @@
+action:
+    generic:
+        filter: Filter
+
+pagination:
+    action:
+        label:
+            first: «
+            last: »
+            next: ›
+            prev: ‹
+        tooltip:
+            first: Go to first page
+            last: Go to last page
+            next: Go to next page
+            prev: Go to previous page
+    item_total: >-
+        {count, plural,
+            one {# item}
+            other {# items}
+        }
+    separator: '/'

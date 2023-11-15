@@ -1,0 +1,21 @@
+{
+	"name": "willherzog/symfony-item-paginator-bundle",
+	"description": "A bundle to provide Doctrine entity based pagination within the Symfony framework.",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Will Herzog",
+            "email": "willherzog@gmail.com"
+        }
+    ],
+    "require": {
+		"php": "^8.2",
+        "doctrine/doctrine-bundle": "^2.7.1",
+		"symfony/framework-bundle": "^6.2",
+		"symfony/options-resolver": "^6.3"
+	},
+    "autoload": {
+        "psr-4": { "WHSymfony\\WHItemPaginatorBundle\\": "src/" }
+    }
+}

@@ -1,0 +1,1 @@
+			<a class="action {{ action_class }}" href="{{ url }}"{% if rel is defined %} rel="{{ rel }}"{% endif %}{% if key is defined %} accesskey="{{ key }}"{% endif %}{% if add_action_tooltips|default(true) and tooltip is defined %} title="{{ tooltip|trans }}"{% endif %}>{{ label }}</a>
