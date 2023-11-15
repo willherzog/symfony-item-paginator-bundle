@@ -17,7 +17,7 @@ use WHSymfony\WHItemPaginatorBundle\Util\StringUtil;
  */
 abstract class ItemPaginator
 {
-	protected readonly string $entityAlias;
+	public readonly string $entityAlias;
 	private readonly string $countProperty;
 
 	// These properties are not available until ->handleRequest() has been called
