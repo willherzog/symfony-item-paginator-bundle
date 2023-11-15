@@ -17,11 +17,11 @@ final class PaginatorConfigBuilderFactory
 		private readonly string $shortcutKeyLast
 	) {}
 
-	public function createBuilder(): PaginatorConfigBuilder
+	public function createBuilder(int $itemsPerPage = null): PaginatorConfigBuilder
 	{
 		return new PaginatorConfigBuilder(
 			$this->pageRequestQuery,
-			$this->itemsPerPage,
+			$itemsPerPage ?? $this->itemsPerPage,
 			$this->maxNumericLinks,
 			$this->shortcutKeyPrev,
 			$this->shortcutKeyNext,
