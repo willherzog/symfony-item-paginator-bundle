@@ -12,9 +12,6 @@ class ItemSearchFilter implements ItemFilter, HasRequestQuery
 {
 	use IsApplicableRequestQueryTrait;
 
-	/**
-	 * @inheritDoc
-	 */
 	protected bool $requireNotEmpty = true;
 
 	public function __construct(protected readonly array $searchColumns)

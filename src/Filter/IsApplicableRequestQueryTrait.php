@@ -11,10 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 trait IsApplicableRequestQueryTrait
 {
-	/**
-	 * Set this property to TRUE to require the request query value to not be empty (instead of merely not NULL).
-	 */
-	protected bool $requireNotEmpty = false;
+	// Set this property to TRUE to require the request query value to not be empty (instead of merely not NULL).
+	// protected bool $requireNotEmpty = true;
 
 	/**
 	 * Value from request query, which will be set by this trait's ->isApplicable() method.
@@ -38,7 +36,7 @@ trait IsApplicableRequestQueryTrait
 
 		$this->requestQueryValue = $request->query->get($queryName);
 
-		if( $this->requireNotEmpty ) {
+		if( isset($this->requireNotEmpty) && $this->requireNotEmpty ) {
 			return !empty($this->requestQueryValue);
 		}
 
