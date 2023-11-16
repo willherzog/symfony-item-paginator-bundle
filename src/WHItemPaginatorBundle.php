@@ -5,6 +5,7 @@ namespace WHSymfony\WHItemPaginatorBundle;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
@@ -77,5 +78,16 @@ class WHItemPaginatorBundle extends AbstractBundle
 			->set('wh_item_paginator.paginator_factory', ItemPaginatorFactory::class)
 				->args([service('doctrine.orm.default_entity_manager')])
 		;
+
+		$container->parameters()
+			->set('wh_item_paginator.page_request_query', $config['page_request_query'])
+		;
+	}
+
+	public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
+	{
+		$container->extension('twig', [
+			'globals' => ['paginator_request_query' => param('%wh_item_paginator.page_request_query%')]
+		]);
 	}
 }
