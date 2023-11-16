@@ -5,7 +5,7 @@ namespace WHSymfony\WHItemPaginatorBundle\Paginator;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * A default implementation of abstract ItemPaginator methods ->initialize() and ->getQueryBuilder().
+ * Provides a ->createQueryBuilder() helper method and a default implementation of abstract ItemPaginator method ->getQueryBuilder().
  *
  * @author Will Herzog <willherzog@gmail.com>
  */
@@ -13,20 +13,12 @@ trait DefaultQueryBuilderTrait
 {
 	protected readonly QueryBuilder $queryBuilder;
 
-	protected function createQueryBuilder(): static
+	protected function createQueryBuilder(string $entityClass): static
 	{
 		/** @var QueryBuilder */
-		$this->queryBuilder = $this->entityManager->getRepository($this->itemType->getEntityClass())->createQueryBuilder($this->entityAlias);
+		$this->queryBuilder = $this->entityManager->getRepository($entityClass)->createQueryBuilder($this->entityAlias);
 
 		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function initialize(): void
-	{
-		$this->createQueryBuilder();
 	}
 
 	/**
