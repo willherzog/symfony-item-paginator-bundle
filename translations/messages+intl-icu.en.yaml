@@ -5,6 +5,11 @@ action:
 pagination:
     action:
         label:
+            first: First
+            last: Last
+            next: Next
+            prev: Previous
+        symbol:
             first: «
             last: »
             next: ›

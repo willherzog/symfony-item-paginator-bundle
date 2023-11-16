@@ -9,6 +9,7 @@ final class PaginatorConfigBuilder
 {
 	public const DISPLAY_OPTIONS = [
 		'show_item_total' => 'bool',
+		'symbol_based_labels' => 'bool',
 		'show_bookend_actions' => 'bool',
 		'show_placeholders' => 'bool',
 		'max_numeric_links' => 'int',
