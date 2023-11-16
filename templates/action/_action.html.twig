@@ -1,7 +1,7 @@
 {% set label = label is defined ? label|trans : action_goto %}
 {% if using_buttons %}
-	{{~ include('action/_button.html.twig', {script_goto: action_goto}) }}
+	{{~ include('@WHItemPaginator/action/_button.html.twig', {script_goto: action_goto}) }}
 {% else %}
 	{%~ set action_request_queries = request_queries|merge({(paginator_request_query): action_goto}) %}
-	{{~ include('action/_link.html.twig', {url: path(app.current_route, app.current_route_parameters|merge(action_request_queries))}) }}
+	{{~ include('@WHItemPaginator/action/_link.html.twig', {url: path(app.current_route, app.current_route_parameters|merge(action_request_queries))}) }}
 {% endif %}

@@ -11,8 +11,8 @@
 {% set any_available = paginator.lastPage != paginator.firstPage %}
 {% set show_first_last = paginator.config.flags.get('display_bookend_actions') and paginator.lastPage > 2 %}
 {% set numeric_actions = paginator.numericActions %}
-{% set action_template = 'action/_action.html.twig' %}
-{% set placeholder_template = 'action/_placeholder.html.twig' %}
+{% set action_template = '@WHItemPaginator/action/_action.html.twig' %}
+{% set placeholder_template = '@WHItemPaginator/action/_placeholder.html.twig' %}
 {% if any_available or display_item_total %}
 		<nav class="pagination">
 	{%~ if display_item_total %}
