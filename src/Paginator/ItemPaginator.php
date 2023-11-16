@@ -255,6 +255,11 @@ abstract class ItemPaginator
 		$this->items = $queryBuilder->getQuery()->getResult();
 	}
 
+	final public function hasItems(): bool
+	{
+		return $this->items !== null && (!is_countable($this->items) || count($this->items) > 0);
+	}
+
 	final public function getItems(): iterable
 	{
 		return $this->items;
