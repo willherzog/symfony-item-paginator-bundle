@@ -276,11 +276,13 @@ abstract class ItemPaginator
 			throw new \LogicException('ItemPaginator::calculateItemTotalAndPageCount() must be called first before calling this method.');
 		}
 
-		if( $this->config->maxNumericLinks === 0 ) {
+		$maxNumericActions = $this->config->displayOption['max_numeric_links'];
+
+		if( $maxNumericActions === 0 ) {
 			return [];
 		}
 
-		$actionsLimit = min($this->config->maxNumericLinks, ($this->lastPage - 1));
+		$actionsLimit = min($maxNumericActions, ($this->lastPage - 1));
 
 		$beforeCurrent = (int) floor($actionsLimit / 2);
 		$afterCurrent = (int) ceil($actionsLimit / 2);

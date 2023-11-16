@@ -4,12 +4,12 @@
 	{%~ set using_buttons = false %}
 	{%~ set request_queries = app.request.query.all %}
 {% endif %}
-{% set display_item_total = paginator.config.flags.get('display_item_total') %}
-{% set display_current_page = paginator.config.flags.get('display_current_page') %}
-{% set display_page_count = paginator.config.flags.get('display_page_count') %}
-{% set display_placeholders = paginator.config.flags.get('display_placeholders') %}
+{% set display_item_total = paginator.config.displayOption['show_item_total'] %}
+{% set display_current_page = paginator.config.displayOption['show_current_page'] %}
+{% set display_page_count = paginator.config.displayOption['show_page_count'] %}
+{% set display_placeholders = paginator.config.displayOption['show_placeholders'] %}
 {% set any_available = paginator.lastPage != paginator.firstPage %}
-{% set show_first_last = paginator.config.flags.get('display_bookend_actions') and paginator.lastPage > 2 %}
+{% set show_first_last = paginator.config.displayOption['show_bookend_actions'] and paginator.lastPage > 2 %}
 {% set numeric_actions = paginator.numericActions %}
 {% set action_template = '@WHItemPaginator/action/_action.html.twig' %}
 {% set placeholder_template = '@WHItemPaginator/action/_placeholder.html.twig' %}
@@ -24,12 +24,12 @@
 			{%~ set prevPage = paginator.currentPage - 1 %}
 			{%~ if show_first_last %}
 				{%~ if prevPage != paginator.firstPage %}
-					{{~ include(action_template, {label: 'pagination.action.label.first', action_class: 'goto-first', action_goto: paginator.firstPage, tooltip: 'pagination.action.tooltip.first', rel: 'first', key: paginator.config.shortcutKeyFirst}) -}}
+					{{~ include(action_template, {label: 'pagination.action.label.first', action_class: 'goto-first', action_goto: paginator.firstPage, tooltip: 'pagination.action.tooltip.first', rel: 'first', key: paginator.config.shortcutKey['first']}) -}}
 				{%~ elseif display_placeholders %}
 					{{~ include(placeholder_template, {label: 'pagination.action.label.first', action_class: 'goto-first'}) -}}
 				{%~ endif %}
 			{%~ endif %}
-			{{~ include(action_template, {label: 'pagination.action.label.prev', action_class: 'goto-prev', action_goto: prevPage, tooltip: 'pagination.action.tooltip.prev', rel: 'prev', key: paginator.config.shortcutKeyPrev}) -}}
+			{{~ include(action_template, {label: 'pagination.action.label.prev', action_class: 'goto-prev', action_goto: prevPage, tooltip: 'pagination.action.tooltip.prev', rel: 'prev', key: paginator.config.shortcutKey['previous']}) -}}
 		{%~ elseif display_placeholders %}
 			{%~ if show_first_last %}
 				{{~ include(placeholder_template, {label: 'pagination.action.label.first', action_class: 'goto-first'}) -}}
@@ -49,7 +49,7 @@
 			<span class="current-page">{{ paginator.currentPage }}</span>
 			{%~ endif %}
 			{%~ if display_current_page and display_page_count %}
-			{{ 'pagination.separator'|trans }}
+			{{ paginator.config.displayOption['separator'] }}
 			{%~ endif %}
 			{%~ if display_page_count %}
 			<span class="page-count">{{ paginator.lastPage }}</span>
@@ -57,10 +57,10 @@
 		{%~ endif %}
 		{%~ if paginator.currentPage != paginator.lastPage %}
 			{%~ set nextPage = paginator.currentPage + 1 %}
-			{{~ include(action_template, {label: 'pagination.action.label.next', action_class: 'goto-next', action_goto: nextPage, tooltip: 'pagination.action.tooltip.next', rel: 'next', key: paginator.config.shortcutKeyNext}) -}}
+			{{~ include(action_template, {label: 'pagination.action.label.next', action_class: 'goto-next', action_goto: nextPage, tooltip: 'pagination.action.tooltip.next', rel: 'next', key: paginator.config.shortcutKey['next']}) -}}
 			{%~ if show_first_last %}
 				{%~ if nextPage != paginator.lastPage %}
-					{{~ include(action_template, {label: 'pagination.action.label.last', action_class: 'goto-last', action_goto: paginator.lastPage, tooltip: 'pagination.action.tooltip.last', rel: 'last', key: paginator.config.shortcutKeyLast}) -}}
+					{{~ include(action_template, {label: 'pagination.action.label.last', action_class: 'goto-last', action_goto: paginator.lastPage, tooltip: 'pagination.action.tooltip.last', rel: 'last', key: paginator.config.shortcutKey['last']}) -}}
 				{%~ elseif display_placeholders %}
 					{{~ include(placeholder_template, {label: 'pagination.action.label.last', action_class: 'goto-last'}) -}}
 				{%~ endif %}

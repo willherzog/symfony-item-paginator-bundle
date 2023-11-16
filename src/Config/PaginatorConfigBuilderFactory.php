@@ -10,11 +10,8 @@ final class PaginatorConfigBuilderFactory
 	public function __construct(
 		private readonly string $pageRequestQuery,
 		private readonly int $itemsPerPage,
-		private readonly int $maxNumericLinks,
-		private readonly string $shortcutKeyPrev,
-		private readonly string $shortcutKeyNext,
-		private readonly string $shortcutKeyFirst,
-		private readonly string $shortcutKeyLast
+		private readonly array $displayOptions,
+		private readonly array $shortcutKeys
 	) {}
 
 	public function createBuilder(int $itemsPerPage = null): PaginatorConfigBuilder
@@ -22,11 +19,8 @@ final class PaginatorConfigBuilderFactory
 		return new PaginatorConfigBuilder(
 			$this->pageRequestQuery,
 			$itemsPerPage ?? $this->itemsPerPage,
-			$this->maxNumericLinks,
-			$this->shortcutKeyPrev,
-			$this->shortcutKeyNext,
-			$this->shortcutKeyFirst,
-			$this->shortcutKeyLast
+			$this->displayOptions,
+			$this->shortcutKeys
 		);
 	}
 }

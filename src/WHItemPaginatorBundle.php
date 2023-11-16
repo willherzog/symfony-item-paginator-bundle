@@ -26,16 +26,46 @@ class WHItemPaginatorBundle extends AbstractBundle
 				->scalarNode('page_request_query')
 					->cannotBeEmpty()
 					->defaultValue('page')
+					->info('The request query added to the URL to determine the current pagination page (e.g. "?page=2").')
 				->end()
 				->integerNode('items_per_page')
 					->defaultValue(10)
 					->min(1)->max(999)
-					->info('Maximum items shown per pagination page.')
+					->info('The default maximum items shown per pagination page.')
 				->end()
-				->integerNode('max_numeric_links')
-					->defaultValue(4)
-					->min(0)->max(99)
-					->info('The maximum amount of page number actions (i.e. not including next/previous/first/last).')
+				->arrayNode('display_options')
+					->addDefaultsIfNotSet()
+					->children()
+						->booleanNode('show_item_total')
+							->defaultTrue()
+							->info('Whether to display the total item count as a translation string before the actions/links.')
+						->end()
+						->booleanNode('show_bookend_actions')
+							->defaultTrue()
+							->info('Whether to display actions for going to the first/last pages.')
+						->end()
+						->booleanNode('show_placeholders')
+							->defaultFalse()
+							->info('Whether to show placeholers for next/previous/first/last actions when they are not applicable (e.g. previous/first on the first page).')
+						->end()
+						->integerNode('max_numeric_links')
+							->defaultValue(4)
+							->min(0)->max(99)
+							->info('The maximum amount of page number actions (i.e. not including next/previous/first/last).')
+						->end()
+						->booleanNode('show_current_page')
+							->defaultTrue()
+							->info('Whether to display the current page number (placed in numeric order within the numeric links, if there are any)')
+						->end()
+						->booleanNode('show_page_count')
+							->defaultFalse()
+							->info('Whether to display the total page count after the current page number (show_current_page must also be enabled).')
+						->end()
+						->scalarNode('separator')
+							->defaultValue('/')
+							->info('String to output, if any, between the current page number and the total page count.')
+						->end()
+					->end()
 				->end()
 				->arrayNode('shortcut_keys')
 					->addDefaultsIfNotSet()
@@ -69,11 +99,8 @@ class WHItemPaginatorBundle extends AbstractBundle
 				->args([
 					$config['page_request_query'],
 					$config['items_per_page'],
-					$config['max_numeric_links'],
-					$config['shortcut_keys']['previous'],
-					$config['shortcut_keys']['next'],
-					$config['shortcut_keys']['first'],
-					$config['shortcut_keys']['last']
+					$config['display_options'],
+					$config['shortcut_keys']
 				])
 			->alias(PaginatorConfigBuilderFactory::class, 'wh_item_paginator.config_builder_factory')
 		;

@@ -7,14 +7,23 @@ namespace WHSymfony\WHItemPaginatorBundle\Config;
  */
 final class PaginatorConfigBuilder
 {
+	public const DISPLAY_OPTIONS = [
+		'show_item_total' => 'bool',
+		'show_bookend_actions' => 'bool',
+		'show_placeholders' => 'bool',
+		'max_numeric_links' => 'int',
+		'show_current_page' => 'bool',
+		'show_page_count' => 'bool',
+		'separator' => 'string'
+	];
+
+	public const SHORTCUT_KEYS = ['previous','next','first','last'];
+
 	public function __construct(
 		private string $pageRequestQuery,
 		private int $itemsPerPage,
-		private int $maxNumericLinks,
-		private string $shortcutKeyPrev,
-		private string $shortcutKeyNext,
-		private string $shortcutKeyFirst,
-		private string $shortcutKeyLast
+		private array $displayOptions,
+		private array $shortcutKeys
 	) {}
 
 	public function setItemsPerPage(int $itemsPerPage): static
@@ -31,37 +40,35 @@ final class PaginatorConfigBuilder
 		return $this;
 	}
 
-	public function setMaxNumericLinks(int $maxNumericLinks): static
+	public function setDisplayOption(string $option, mixed $value): static
 	{
-		$this->maxNumericLinks = $maxNumericLinks;
+		if( !key_exists($option, self::DISPLAY_OPTIONS) ) {
+			throw new \InvalidArgumentException(sprintf('"%s" is not one of the supported display options.'));
+		}
+
+		$expectedType = self::DISPLAY_OPTIONS[$option];
+		$actualType = get_debug_type($value);
+
+		if( $actualType !== $expectedType ) {
+			throw new \InvalidArgumentException(sprintf('Expected value of type "%s" for display option "%s" but got "%s" instead.', $expectedType, $option, $actualType));
+		}
+
+		$this->displayOptions[$option] = $value;
 
 		return $this;
 	}
 
-	public function setShortcutKeyPrev(string $shortcutKey): static
+	public function setShortcutKeyPrev(string $shortcut, string $key): static
 	{
-		$this->shortcutKeyPrev = $shortcutKey;
+		if( !in_array($shortcut, self::SHORTCUT_KEYS, true) ) {
+			throw new \InvalidArgumentException(sprintf('"%s" is not one of the supported shortcut keys.'));
+		}
 
-		return $this;
-	}
+		if( strlen($key) !== 1 ) {
+			throw new \InvalidArgumentException('Shortcut key must a string with exactly 1 character.');
+		}
 
-	public function setShortcutKeyNextv(string $shortcutKey): static
-	{
-		$this->shortcutKeyNext = $shortcutKey;
-
-		return $this;
-	}
-
-	public function setShortcutKeyFirst(string $shortcutKey): static
-	{
-		$this->shortcutKeyFirst = $shortcutKey;
-
-		return $this;
-	}
-
-	public function setShortcutKeyLast(string $shortcutKey): static
-	{
-		$this->shortcutKeyLast = $shortcutKey;
+		$this->shortcutKeys[$shortcut] = $key;
 
 		return $this;
 	}
@@ -71,11 +78,8 @@ final class PaginatorConfigBuilder
 		return new PaginatorConfig(
 			$this->pageRequestQuery,
 			$this->itemsPerPage,
-			$this->maxNumericLinks,
-			$this->shortcutKeyPrev,
-			$this->shortcutKeyNext,
-			$this->shortcutKeyFirst,
-			$this->shortcutKeyLast
+			$this->displayOptions,
+			$this->shortcutKeys
 		);
 	}
 }

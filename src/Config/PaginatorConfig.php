@@ -7,17 +7,10 @@ namespace WHSymfony\WHItemPaginatorBundle\Config;
  */
 final readonly class PaginatorConfig
 {
-	public PaginatorConfigDisplayFlags $flags;
-
 	public function __construct(
 		public string $pageRequestQuery,
 		public int $itemsPerPage,
-		public int $maxNumericLinks,
-		public string $shortcutKeyPrev,
-		public string $shortcutKeyNext,
-		public string $shortcutKeyFirst,
-		public string $shortcutKeyLast
-	) {
-		$this->flags = new PaginatorConfigDisplayFlags();
-	}
+		public array $displayOption,
+		public array $shortcutKey
+	) {}
 }
