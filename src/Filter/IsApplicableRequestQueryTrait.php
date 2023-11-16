@@ -19,7 +19,7 @@ trait IsApplicableRequestQueryTrait
 	/**
 	 * Value from request query, which will be set by this trait's ->isApplicable() method.
 	 */
-	protected ?mixed $requestQueryValue = null;
+	protected mixed $requestQueryValue = null;
 
 	/**
 	 * @inheritDoc
