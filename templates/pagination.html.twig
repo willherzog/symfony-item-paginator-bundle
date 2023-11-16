@@ -23,7 +23,7 @@
 		{%~ set action_label_prefix = 'pagination.action.' %}
 		{%~ if paginator.config.displayOption['symbol_based_labels'] %}
 			{%~ set action_label_prefix = action_label_prefix ~ 'symbol.' %}
-		{%~ endif %}
+		{%~ else %}
 			{%~ set action_label_prefix = action_label_prefix ~ 'label.' %}
 		{%~ endif %}
 		{%~ if paginator.currentPage != paginator.firstPage %}
