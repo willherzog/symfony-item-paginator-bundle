@@ -5,12 +5,12 @@ namespace WHSymfony\WHItemPaginatorBundle;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 use WHSymfony\WHItemPaginatorBundle\Config\PaginatorConfigBuilderFactory;
 use WHSymfony\WHItemPaginatorBundle\Paginator\ItemPaginatorFactory;
+use WHSymfony\WHItemPaginatorBundle\Twig\ItemPaginatorExtension;
 
 /**
  * @author Will Herzog <willherzog@gmail.com>
@@ -87,15 +87,9 @@ class WHItemPaginatorBundle extends AbstractBundle
 			->alias(ItemPaginatorFactory::class, 'wh_item_paginator.paginator_factory')
 		;
 
-		$container->parameters()
-			->set('wh_item_paginator.page_request_query', $config['page_request_query'])
+		$container->services()
+			->set('wh_item_paginator.twig.extension', ItemPaginatorExtension::class)
+				->args([$config['page_request_query']])
 		;
-	}
-
-	public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
-	{
-		$container->extension('twig', [
-			'globals' => ['paginator_request_query' => param('%wh_item_paginator.page_request_query%')]
-		]);
 	}
 }
