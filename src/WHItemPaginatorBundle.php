@@ -34,7 +34,7 @@ class WHItemPaginatorBundle extends AbstractBundle
 				->end()
 				->integerNode('max_numeric_links')
 					->defaultValue(4)
-					->min(1)->max(99)
+					->min(0)->max(99)
 					->info('The maximum amount of page number actions (i.e. not including next/previous/first/last).')
 				->end()
 				->arrayNode('shortcut_keys')
