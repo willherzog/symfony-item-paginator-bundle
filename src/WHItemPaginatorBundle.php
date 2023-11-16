@@ -90,6 +90,7 @@ class WHItemPaginatorBundle extends AbstractBundle
 		$container->services()
 			->set('wh_item_paginator.twig.extension', ItemPaginatorExtension::class)
 				->args([$config['page_request_query']])
+				->tag('twig.extension')
 		;
 	}
 }
