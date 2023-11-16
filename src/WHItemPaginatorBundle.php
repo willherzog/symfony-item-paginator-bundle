@@ -75,8 +75,16 @@ class WHItemPaginatorBundle extends AbstractBundle
 					$config['shortcut_keys']['first'],
 					$config['shortcut_keys']['last']
 				])
+			->alias(PaginatorConfigBuilderFactory::class, 'wh_item_paginator.config_builder_factory')
+		;
+
+		$container->services()
 			->set('wh_item_paginator.paginator_factory', ItemPaginatorFactory::class)
-				->args([service('doctrine.orm.default_entity_manager')])
+				->args([
+					service('doctrine.orm.default_entity_manager'),
+					service('wh_item_paginator.config_builder_factory')
+				])
+			->alias(ItemPaginatorFactory::class, 'wh_item_paginator.paginator_factory')
 		;
 
 		$container->parameters()
