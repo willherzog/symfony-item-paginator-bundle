@@ -240,6 +240,8 @@ abstract class ItemPaginator
 			$this->appliedFilters = true;
 		}
 
+		$this->firstPage = 1;
+
 		if( !$this->calculatedItemTotalAndPageCount ) {
 			$countQB = clone $this->getQueryBuilder();
 
@@ -250,8 +252,6 @@ abstract class ItemPaginator
 
 			$this->calculatedItemTotalAndPageCount = true;
 		}
-
-		$this->firstPage = 1;
 
 		if( $request->query->has($this->config->pageRequestQuery) ) {
 			$this->currentPage = $request->query->getInt($this->config->pageRequestQuery);
