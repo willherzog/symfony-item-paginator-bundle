@@ -2,14 +2,14 @@
 
 namespace WHSymfony\WHItemPaginatorBundle\Paginator;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 use WHSymfony\WHItemPaginatorBundle\Config\{PaginatorConfigBuilder,PaginatorConfigBuilderFactory};
 
 class ItemPaginatorFactory
 {
 	public function __construct(
-		protected readonly EntityManagerInterface $entityManager,
+		protected readonly ManagerRegistry $managerRegistry,
 		protected readonly PaginatorConfigBuilderFactory $configBuilderFactory
 	) {}
 
@@ -27,6 +27,6 @@ class ItemPaginatorFactory
 			$configBuilder = $this->configBuilderFactory->createBuilder();
 		}
 
-		return new $class($configBuilder->build(), $this->entityManager);
+		return new $class($configBuilder->build(), $this->managerRegistry);
 	}
 }

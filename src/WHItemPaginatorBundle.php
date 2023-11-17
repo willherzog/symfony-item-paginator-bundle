@@ -112,7 +112,7 @@ class WHItemPaginatorBundle extends AbstractBundle
 		$container->services()
 			->set('wh_item_paginator.paginator_factory', ItemPaginatorFactory::class)
 				->args([
-					service('doctrine.orm.default_entity_manager'),
+					service('doctrine'),
 					service('wh_item_paginator.config_builder_factory')
 				])
 			->alias(ItemPaginatorFactory::class, 'wh_item_paginator.paginator_factory')

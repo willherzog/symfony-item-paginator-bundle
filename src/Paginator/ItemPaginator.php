@@ -2,6 +2,7 @@
 
 namespace WHSymfony\WHItemPaginatorBundle\Paginator;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
@@ -17,8 +18,12 @@ use WHSymfony\WHItemPaginatorBundle\Util\StringUtil;
  */
 abstract class ItemPaginator
 {
+	protected readonly string $entityClass;
 	public readonly string $entityAlias;
 	private readonly string $countProperty;
+
+	protected readonly EntityManagerInterface $entityManager;
+	protected readonly QueryBuilder $queryBuilder;
 
 	// These properties are not available until ->handleRequest() has been called
 	public readonly int $itemTotal;
@@ -26,7 +31,7 @@ abstract class ItemPaginator
 	public readonly int $lastPage;
 	public readonly int $currentPage;
 
-	private bool $filtersApplied = false;
+	private bool $appliedFilters = false;
 	private bool $calculatedItemTotalAndPageCount = false;
 
 	private array $selectStatements = [];
@@ -37,13 +42,34 @@ abstract class ItemPaginator
 
 	final public function __construct(
 		public readonly PaginatorConfig $config,
-		protected readonly EntityManagerInterface $entityManager
+		ManagerRegistry $managerRegistry
 	) {
+		$this->entityClass = $this->getEntityClass();
 		$this->entityAlias = $this->getEntityAlias();
 		$this->countProperty = $this->getCountProperty();
 
+		if( !class_exists($this->entityClass) ) {
+			throw new \LogicException(sprintf('Entity class "%s" does not exist.', $this->entityClass));
+		}
+
+		$objectManager = $managerRegistry->getManagerForClass($this->entityClass);
+
+		// Need to require EntityManagerInterface specifically in order to use Doctrine ORM's query building features
+		if( $objectManager instanceof EntityManagerInterface ) {
+			$this->entityManager = $objectManager;
+		} else {
+			throw new \RuntimeException(sprintf('Did not receive an instance of "%s" as the object manager for entity class "%s".', EntityManagerInterface::class, $this->entityClass));
+		}
+
+		$this->queryBuilder = $this->entityManager->getRepository($this->entityClass)->createQueryBuilder($this->entityAlias);
+
 		$this->initialize();
 	}
+
+	/**
+	 * Get FQCN of main entity for Doctrine query building.
+	 */
+	abstract protected function getEntityClass(): string;
 
 	/**
 	 * Get alias of main entity for Doctrine query building.
@@ -60,14 +86,9 @@ abstract class ItemPaginator
 	}
 
 	/**
-	 * Called once in constructor; use for one-time setup logic, such as creating a QueryBuilder instance.
+	 * Called once in constructor; use for one-time setup logic.
 	 */
 	abstract protected function initialize(): void;
-
-	/**
-	 * Get class-specific instance of QueryBuilder.
-	 */
-	abstract protected function getQueryBuilder(): QueryBuilder;
 
 	/**
 	 * Get translation string to use for the item total.
@@ -84,7 +105,7 @@ abstract class ItemPaginator
 	 */
 	final public function addFilter(ItemFilter $filter): static
 	{
-		if( $this->filtersApplied ) {
+		if( $this->appliedFilters ) {
 			throw new \LogicException('Filters have already been applied: filters can no longer be added.');
 		}
 
@@ -97,6 +118,17 @@ abstract class ItemPaginator
 		return $this;
 	}
 
+	/**
+	 * Get paginator-specific query builder.
+	 */
+	final public function getQueryBuilder(): QueryBuilder
+	{
+		return $this->queryBuilder;
+	}
+
+	/**
+	 * Get reference for an associated entity.
+	 */
 	final public function getEntityReference(string $entityClass, int $entityId): object
 	{
 		return $this->entityManager->getReference($entityClass, $entityId);
@@ -198,14 +230,14 @@ abstract class ItemPaginator
 	 */
 	final public function handleRequest(Request $request): void
 	{
-		if( !$this->filtersApplied ) {
+		if( !$this->appliedFilters ) {
 			foreach( $this->filters as $filter ) {
 				if( $filter->isApplicable($request) ) {
 					$filter->apply($this);
 				}
 			}
 
-			$this->filtersApplied = true;
+			$this->appliedFilters = true;
 		}
 
 		if( !$this->calculatedItemTotalAndPageCount ) {
@@ -273,7 +305,7 @@ abstract class ItemPaginator
 	final public function getNumericActions(): array
 	{
 		if( !$this->calculatedItemTotalAndPageCount ) {
-			throw new \LogicException('ItemPaginator::handleRequest() must be called first before calling this method.');
+			throw new \LogicException('This obect\'s ->handleRequest() method must be called first before calling this method.');
 		}
 
 		$maxNumericActions = $this->config->displayOption['max_numeric_links'];
