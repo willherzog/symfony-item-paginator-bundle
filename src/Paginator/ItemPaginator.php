@@ -198,14 +198,6 @@ abstract class ItemPaginator
 	 */
 	final public function handleRequest(Request $request): void
 	{
-		$this->firstPage = 1;
-
-		if( $request->query->has($this->config->pageRequestQuery) ) {
-			$this->currentPage = $request->query->getInt($this->config->pageRequestQuery);
-		} else {
-			$this->currentPage = $this->firstPage;
-		}
-
 		if( !$this->filtersApplied ) {
 			foreach( $this->filters as $filter ) {
 				if( $filter->isApplicable($request) ) {
@@ -225,6 +217,14 @@ abstract class ItemPaginator
 			$this->lastPage = $this->itemTotal > $this->config->itemsPerPage ? (int) ceil($this->itemTotal / $this->config->itemsPerPage) : $this->firstPage;
 
 			$this->calculatedItemTotalAndPageCount = true;
+		}
+
+		$this->firstPage = 1;
+
+		if( $request->query->has($this->config->pageRequestQuery) ) {
+			$this->currentPage = $request->query->getInt($this->config->pageRequestQuery);
+		} else {
+			$this->currentPage = $this->firstPage;
 		}
 
 		if( $this->currentPage < $this->firstPage || $this->currentPage > $this->lastPage ) {
@@ -273,7 +273,7 @@ abstract class ItemPaginator
 	final public function getNumericActions(): array
 	{
 		if( !$this->calculatedItemTotalAndPageCount ) {
-			throw new \LogicException('ItemPaginator::calculateItemTotalAndPageCount() must be called first before calling this method.');
+			throw new \LogicException('ItemPaginator::handleRequest() must be called first before calling this method.');
 		}
 
 		$maxNumericActions = $this->config->displayOption['max_numeric_links'];
