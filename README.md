@@ -1,6 +1,8 @@
 # WHItemPaginatorBundle
  A bundle to provide Doctrine entity based pagination within the Symfony framework.
 
+ Warning: There is currently an elusive issue only affecting the `prod` environment (thus making it much harder to diagnose) whereby the resultant SQL statements for both of this bundle's database queries are reverting to `null`. I'm still trying to track down the cause, but I'll remove this warning after it's been fixed.
+
 
 Installation
 ============
