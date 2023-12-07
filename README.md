@@ -153,7 +153,7 @@ use WHSymfony\WHItemPaginatorBundle\Paginator\ItemPaginator;
 $paginator->addFilter(new ItemSearchFilter(['name'])); // "name" should be replaced with a property on your entity
 ```
 
-### Additional Filter Functionality
+### Additional Functionality
 
 _\* Besides using the QueryBuilder API directly, paginator classes have some additional methods for altering the resulting database query:_
 
