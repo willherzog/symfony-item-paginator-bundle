@@ -51,7 +51,7 @@ As you'll see, using this bundle ties closely with the Symfony framework, togeth
 Step 1: Create a paginator class
 --------------------------------
 
-Each entity (or "item") must have its own paginator class extending from abstract class `WHSymfony\WHItemPaginatorBundle\Paginator\ItemPaginator` with the required method definitions seen below:
+Each entity (or "item") must have its own paginator class extending from abstract class `WHSymfony\WHItemPaginatorBundle\Paginator\ItemPaginator` with definitions for its required methods, as seen below:
 
 ```php
 <?php
