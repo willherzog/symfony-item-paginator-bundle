@@ -241,7 +241,7 @@ use App\Form\Type\ExampleFilterForm;
 
         return $this->render('index.html.twig', [
             'paginator' => $paginator,
-			'filter_form' => $filterForm /* Add a parameter for the form to the template context */
+            'filter_form' => $filterForm /* Add a parameter for the form to the template context */
         ]);
     }
 ```
