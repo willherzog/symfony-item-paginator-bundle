@@ -298,4 +298,52 @@ The filter form template (`@WHItemPaginator/filter_form.html.twig`) requires the
 Configuration
 =============
 
-Coming soon...
+Default config
+--------------
+
+```yaml
+# config/packages/wh_paginator.yaml
+
+wh_paginator:
+    page_request_query: 'page'
+    items_per_page: 10
+    display_options:
+        show_item_total: true
+        symbol_based_labels: true
+        show_bookend_actions: true
+        show_placeholders: false
+        max_numeric_links: 4
+        show_current_page: true
+        show_page_count: false
+        separator: '/'
+    shortcut_keys:
+        previous: 'p'
+        next: 'n'
+        first: 'f'
+        last: 'l'
+```
+
+Config descriptions
+-------------------
+
+`wh_paginator.page_request_query` _(string)_: The request query added to the URL to determine the current pagination page (e.g. `?page=2`, with the default value).
+
+`wh_paginator.items_per_page` _(integer, 1-999)_: The maximum number of items to show on a single pagination page.
+
+`wh_paginator.display_options.show_item_total` _(boolean)_: Whether to display the total item count as a translation string before the actions/links.
+
+`wh_paginator.display_options.symbol_based_labels` _(boolean)_: Whether to use single-character symbols for the labels of the previous/next/first/last actions.
+
+`wh_paginator.display_options.show_bookend_actions` _(boolean)_: Whether to display actions for going to the first/last pages.
+
+`wh_paginator.display_options.show_placeholders` _(boolean)_: Whether to show placeholers for previous/next/first/last actions when they are not applicable (e.g. previous/first on the first page).
+
+`wh_paginator.display_options.max_numeric_links` _(integer, 0-99)_: The maximum amount of page number actions (i.e. not including next/previous/first/last).
+
+`wh_paginator.display_options.show_current_page` _(boolean)_: Whether to display the current page number (placed in numeric order within the numeric links, if there are any).
+
+`wh_paginator.display_options.show_page_count` _(boolean)_: Whether to display the total page count after the current page number (show_current_page must also be enabled).
+
+`wh_paginator.display_options.separator` _(string)_: String to output, if any, between the current page number and the total page count.
+
+`wh_paginator.shortcut_keys` _(previous/next/first/last, string)_: Shortcut key (should be a single character on the keyboard) to use with each of the previous/next/first/last actions.
