@@ -178,7 +178,72 @@ _** If implementing this interface, you can use the trait `WHSymfony\WHItemPagin
 (Optional) Step 2B: Create filter form(s)
 -----------------------------------------
 
-Coming soon...
+This bundle can easily be used without the Symfony Form component—even with filters. The main reason to make use of the Symfony Form component (besides the inherent reusability of creating a form class) is so that user input can easily be reflected in your filter form(s) after they have been submitted and the page has reloaded. However, form validation is most likely unnecessary since nothing will be modified in the database.
+
+With those things in mind, this is a very basic example of a filter form class:
+
+```php
+<?php
+
+namespace App\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class ExampleFilterForm extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder->add('search', SearchType::class, [
+            'label' => false,
+            'attr' => [
+                'placeholder' => 'Search items...'
+            ]
+        ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'method' => 'GET',
+            'csrf_protection' => false
+        ]);
+    }
+}
+```
+
+Filter forms must use the `GET` method for submission as this bundle currently only supports checking request queries. And, this being the case, it is probably undesirable to have a CSRF protection value appear in the URL following form submission. To ease setting these default options, this bundle provides the trait `WHSymfony\WHItemPaginatorBundle\Form\FilterFormOptionsTrait`. The same example form again, now using this trait:
+
+```php
+<?php
+
+namespace App\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Component\Form\FormBuilderInterface;
+
+use WHSymfony\WHItemPaginatorBundle\Form\FilterFormOptionsTrait;
+
+class ExampleFilterForm extends AbstractType
+{
+    use FilterFormOptionsTrait;
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder->add('search', SearchType::class, [
+            'label' => false,
+            'attr' => [
+                'placeholder' => 'Search items...'
+            ]
+        ]);
+    }
+}
+```
+
+See subsequent steps for how to make further use of filter forms.
 
 Step 3: Apply pagination in a controller
 ----------------------------------------
