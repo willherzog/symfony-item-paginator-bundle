@@ -18,7 +18,7 @@ use WHSymfony\WHItemPaginatorBundle\Util\StringUtil;
  */
 abstract class ItemPaginator
 {
-	protected readonly string $entityClass;
+	public readonly string $entityClass;
 	public readonly string $entityAlias;
 	private readonly string $countProperty;
 
