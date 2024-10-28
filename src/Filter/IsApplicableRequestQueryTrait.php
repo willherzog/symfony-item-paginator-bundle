@@ -14,6 +14,9 @@ trait IsApplicableRequestQueryTrait
 	// Set this property to TRUE to require the request query value to not be empty (instead of merely not NULL).
 	// protected bool $requireNotEmpty = true;
 
+	// Set this property to TRUE to require the request query value to be numeric.
+	// protected bool $requireNumeric = true;
+
 	/**
 	 * Value from request query, which will be set by this trait's ->isApplicable() method.
 	 */
@@ -38,6 +41,10 @@ trait IsApplicableRequestQueryTrait
 
 		if( isset($this->requireNotEmpty) && $this->requireNotEmpty ) {
 			return !empty($this->requestQueryValue);
+		}
+
+		if( isset($this->requireNumeric) && $this->requireNumeric ) {
+			return is_numeric($this->requestQueryValue);
 		}
 
 		return $this->requestQueryValue !== null;
