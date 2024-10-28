@@ -31,7 +31,7 @@ abstract class ItemPaginator
 	public readonly int $lastPage;
 	public readonly int $currentPage;
 
-	private bool $appliedFilters = false;
+	private ?int $appliedFilters = null;
 	private bool $calculatedItemTotalAndPageCount = false;
 
 	private array $selectStatements = [];
@@ -105,7 +105,7 @@ abstract class ItemPaginator
 	 */
 	final public function addFilter(ItemFilter $filter): static
 	{
-		if( $this->appliedFilters ) {
+		if( $this->appliedFilters !== null ) {
 			throw new \LogicException('Filters have already been applied: filters can no longer be added.');
 		}
 
@@ -230,14 +230,16 @@ abstract class ItemPaginator
 	 */
 	final public function handleRequest(Request $request): void
 	{
-		if( !$this->appliedFilters ) {
+		if( $this->appliedFilters === null ) {
+			$this->appliedFilters = 0;
+
 			foreach( $this->filters as $filter ) {
 				if( $filter->isApplicable($request) ) {
 					$filter->apply($this);
+
+					$this->appliedFilters++;
 				}
 			}
-
-			$this->appliedFilters = true;
 		}
 
 		$this->firstPage = 1;
@@ -295,6 +297,14 @@ abstract class ItemPaginator
 	final public function getItems(): iterable
 	{
 		return $this->items;
+	}
+
+	/**
+	 * Retrieve the number of active filters for the current request; this will always return 0 before `->handleRequest()` has been called.
+	 */
+	final public function getActiveFiltersCount(): int
+	{
+		return $this->appliedFilters ?? 0;
 	}
 
 	/**
