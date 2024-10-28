@@ -397,7 +397,7 @@ Config descriptions
 
 `wh_paginator.display_options.show_item_total` _(boolean)_: Whether to display the total item count as a translation string before the actions/links.
 
-`wh_paginator.display_options.symbol_based_labels` _(boolean)_: Whether to use single-character symbols for the labels of the previous/next/first/last actions.
+`wh_paginator.display_options.symbol_based_labels` _(boolean)_: Whether to use single-character symbols for the labels of the previous/next/first/last actions. Regardless, these actions will always have tooltips (using the HTML `title` attribute).
 
 `wh_paginator.display_options.show_bookend_actions` _(boolean)_: Whether to display actions for going to the first/last pages.
 
