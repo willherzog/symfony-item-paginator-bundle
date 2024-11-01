@@ -59,7 +59,7 @@ final class PaginatorConfigBuilder
 		return $this;
 	}
 
-	public function setShortcutKeyPrev(string $shortcut, string $key): static
+	public function setShortcutKey(string $shortcut, string $key): static
 	{
 		if( !in_array($shortcut, self::SHORTCUT_KEYS, true) ) {
 			throw new \InvalidArgumentException(sprintf('"%s" is not one of the supported shortcut keys.'));
