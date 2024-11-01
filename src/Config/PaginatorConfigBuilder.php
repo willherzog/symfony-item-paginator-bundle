@@ -21,12 +21,15 @@ final class PaginatorConfigBuilder
 	public const SHORTCUT_KEYS = ['previous','next','first','last'];
 
 	public function __construct(
-		private string $pageRequestQuery,
-		private int $itemsPerPage,
+		public string $pageRequestQuery,
+		public int $itemsPerPage,
 		private array $displayOptions,
 		private array $shortcutKeys
 	) {}
 
+	/**
+	 * @deprecated The $itemsPerPage property is now public, so should be read/written directly
+	 */
 	public function setItemsPerPage(int $itemsPerPage): static
 	{
 		$this->itemsPerPage = $itemsPerPage;
@@ -34,6 +37,9 @@ final class PaginatorConfigBuilder
 		return $this;
 	}
 
+	/**
+	 * @deprecated The $pageRequestQuery property is now public, so should be read/written directly
+	 */
 	public function setPageRequestQuery(string $pageRequestQuery): static
 	{
 		$this->pageRequestQuery = $pageRequestQuery;
