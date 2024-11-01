@@ -50,7 +50,7 @@ final class PaginatorConfigBuilder
 	public function setDisplayOption(string $option, mixed $value): static
 	{
 		if( !key_exists($option, self::DISPLAY_OPTIONS) ) {
-			throw new \InvalidArgumentException(sprintf('"%s" is not one of the supported display options.'));
+			throw new \InvalidArgumentException(sprintf('"%s" is not one of the supported display options (these can be found in this class\'s DISPLAY_OPTIONS constant).', $option));
 		}
 
 		$expectedType = self::DISPLAY_OPTIONS[$option];
@@ -68,7 +68,7 @@ final class PaginatorConfigBuilder
 	public function setShortcutKey(string $shortcut, string $key): static
 	{
 		if( !in_array($shortcut, self::SHORTCUT_KEYS, true) ) {
-			throw new \InvalidArgumentException(sprintf('"%s" is not one of the supported shortcut keys.'));
+			throw new \InvalidArgumentException(sprintf('"%s" is not one of the supported shortcut keys (these can be found in this class\'s SHORTCUT_KEYS constant).', $shortcut));
 		}
 
 		if( strlen($key) !== 1 ) {
