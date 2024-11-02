@@ -1,4 +1,5 @@
-{% if ajax_only|default(false) %}
+{% set ajax_only = ajax_only|default(false) %}
+{% if ajax_only %}
 	{%~ set using_buttons = true %}
 {% else %}
 	{%~ set using_buttons = false %}
