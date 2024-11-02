@@ -14,7 +14,7 @@
 {% set action_template = '@WHItemPaginator/action/_action.html.twig' %}
 {% set placeholder_template = '@WHItemPaginator/action/_placeholder.html.twig' %}
 {% if any_available or display_item_total %}
-		<nav class="pagination">
+		<nav class="pagination"{% if ajax_only %} data-query-name="{{ paginator.config.pageRequestQuery }}"{% endif %}>
 	{%~ if display_item_total %}
 		{%~ set item_total_label = paginator.itemTotalLabel ?? 'pagination.item_total' %}
 			<span class="item-total">{{ item_total_label|trans({count: paginator.itemTotal}) }}</span>
