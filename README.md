@@ -208,13 +208,14 @@ class ExampleFilterForm extends AbstractType
     {
         $resolver->setDefaults([
             'method' => 'GET',
-            'csrf_protection' => false
+            'csrf_protection' => false,
+            'allow_extra_fields' => true
         ]);
     }
 }
 ```
 
-Filter forms must use the `GET` method for submission as this bundle currently only supports checking request queries. And, this being the case, it is probably undesirable to have a CSRF protection value appear in the URL following form submission. To ease setting these default options, this bundle provides the trait `WHSymfony\WHItemPaginatorBundle\Form\FilterFormOptionsTrait`. The same example form again, now using this trait:
+Filter forms must use the `GET` method for submission as this bundle currently only supports checking request queries. And, this being the case, it is probably undesirable to have a CSRF protection value appear in the URL following form submission. Also, the form should allow extra fields in case it doesn't define a field to coincide with every filter you're using. To ease setting these default options, this bundle provides the trait `WHSymfony\WHItemPaginatorBundle\Form\FilterFormOptionsTrait`. The same example form again, now using this trait:
 
 ```php
 <?php
