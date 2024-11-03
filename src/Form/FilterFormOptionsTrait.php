@@ -11,6 +11,6 @@ trait FilterFormOptionsTrait
 {
 	public function configureOptions(OptionsResolver $resolver): void
 	{
-		$resolver->setDefaults(['method' => 'GET', 'csrf_protection' => false]);
+		$resolver->setDefaults(['method' => 'GET', 'csrf_protection' => false, 'allow_extra_fields' => true]);
 	}
 }
