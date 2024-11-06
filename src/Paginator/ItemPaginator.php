@@ -88,7 +88,9 @@ abstract class ItemPaginator
 	/**
 	 * Called once in constructor; use for one-time setup logic.
 	 */
-	abstract protected function initialize(): void;
+	protected function initialize(): void
+	{
+	}
 
 	/**
 	 * Get translation string to use for the item total.
