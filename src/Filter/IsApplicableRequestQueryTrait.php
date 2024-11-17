@@ -49,7 +49,9 @@ trait IsApplicableRequestQueryTrait
 		}
 
 		if( isset($this->requireNotEmpty) && $this->requireNotEmpty ) {
-			return !empty($this->requestQueryValue);
+			if( ($expectingArray && $this->requestQueryValue === []) || $this->requestQueryValue === '' ) {
+				return false;
+			}
 		}
 
 		if( isset($this->requireNumeric) && $this->requireNumeric ) {
