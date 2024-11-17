@@ -17,6 +17,9 @@ trait IsApplicableRequestQueryTrait
 	// Set this property to TRUE to require the request query value to be numeric.
 	// protected bool $requireNumeric = true;
 
+	// Set this property to TRUE to require the request query value to be an array.
+	// protected bool $requireArray = true;
+
 	/**
 	 * Value from request query, which will be set by this trait's ->isApplicable() method.
 	 */
@@ -37,14 +40,30 @@ trait IsApplicableRequestQueryTrait
 			return false;
 		}
 
-		$this->requestQueryValue = $request->query->get($queryName);
+		$expectingArray = isset($this->requireArray) && $this->requireArray;
+
+		if( $expectingArray ) {
+			$this->requestQueryValue = $request->query->all($queryName);
+		} else {
+			$this->requestQueryValue = $request->query->get($queryName);
+		}
 
 		if( isset($this->requireNotEmpty) && $this->requireNotEmpty ) {
 			return !empty($this->requestQueryValue);
 		}
 
 		if( isset($this->requireNumeric) && $this->requireNumeric ) {
-			return is_numeric($this->requestQueryValue);
+			if( $expectingArray ) {
+				foreach( $this->requestQueryValue as $valueElement ) {
+					if( !is_numeric($valueElement) ) {
+						return false;
+					}
+				}
+
+				return true;
+			} else {
+				return is_numeric($this->requestQueryValue);
+			}
 		}
 
 		return $this->requestQueryValue !== null;
