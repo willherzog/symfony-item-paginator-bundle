@@ -77,8 +77,22 @@ class ExampleItemPaginator extends ItemPaginator
     protected function initialize(): void
     {
         /*
+            (Defining this method is optional)
+
             Custom setup logic goes here, such as adding any unconditional where statement(s) to the
             class instance of the Doctrine ORM QueryBuilder (accessible via $this->queryBuilder).
+            Note that anything applied at this stage WILL affect the count query that is made first.
+        */
+    }
+
+    protected function finalize(): void
+    {
+        /*
+            (Defining this method is optional)
+
+            If you need to make additional adjustments to the QueryBuilder which should affect *only*
+            the select query, those should be done here (this method is called after the count query
+            has been made).
         */
     }
 }
