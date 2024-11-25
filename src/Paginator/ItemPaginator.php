@@ -95,6 +95,14 @@ abstract class ItemPaginator
 	}
 
 	/**
+	 * Called from `->handleRequest()` after filters have been applied and the item total and page count have been calculated.
+	 * At this point it is safe to make query builder changes without interferring with the count query.
+	 */
+	protected function finalize(): void
+	{
+	}
+
+	/**
 	 * Get translation string to use for the item total.
 	 * Override this method to return one other than this bundle's default;
 	 * the translation string should support pluralization using a "count" parameter.
@@ -268,6 +276,8 @@ abstract class ItemPaginator
 		if( $this->currentPage < $this->firstPage || $this->currentPage > $this->lastPage ) {
 			throw new \OutOfBoundsException(sprintf('The requested page number (%d) is outside of the possible range (%d-%d).', $this->currentPage, $this->firstPage, $this->lastPage));
 		}
+
+		$this->finalize();
 
 		$queryBuilder = $this->getQueryBuilder();
 
