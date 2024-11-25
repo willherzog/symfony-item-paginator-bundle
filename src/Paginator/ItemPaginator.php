@@ -48,6 +48,8 @@ abstract class ItemPaginator
 		$this->entityAlias = $this->getEntityAlias();
 		$this->countProperty = $this->getCountProperty();
 
+		$this->selectStatements = [$this->entityAlias]; // i.e. the default select statement
+
 		if( !class_exists($this->entityClass) ) {
 			throw new \LogicException(sprintf('Entity class "%s" does not exist.', $this->entityClass));
 		}
@@ -269,12 +271,8 @@ abstract class ItemPaginator
 
 		$queryBuilder = $this->getQueryBuilder();
 
-		if( count($this->selectStatements) > 0 ) {
-			foreach( $this->selectStatements as $selectStatement ) {
-				$queryBuilder->addSelect($selectStatement);
-			}
-		} else {
-			$queryBuilder->select($this->entityAlias);
+		foreach( $this->selectStatements as $selectStatement ) {
+			$queryBuilder->addSelect($selectStatement);
 		}
 
 		foreach( $this->orderByProps as $propName => $direction ) {
