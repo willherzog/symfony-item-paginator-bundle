@@ -5,6 +5,7 @@ namespace WHSymfony\WHItemPaginatorBundle\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -95,8 +96,7 @@ abstract class ItemPaginator
 	}
 
 	/**
-	 * Called from `->handleRequest()` after filters have been applied and the item total and page count have been calculated.
-	 * At this point it is safe to make query builder changes without interferring with the count query.
+	 * Called from `->handleRequest()` after filters have been applied.
 	 */
 	protected function finalize(): void
 	{
@@ -237,10 +237,40 @@ abstract class ItemPaginator
 		return $filterData;
 	}
 
+	private function getFinalizedQueryBuilder(): QueryBuilder
+	{
+		$this->finalize();
+
+		foreach( $this->selectStatements as $selectStatement ) {
+			$this->queryBuilder->addSelect($selectStatement);
+		}
+
+		foreach( $this->orderByProps as $propName => $direction ) {
+			$this->queryBuilder->addOrderBy($propName, $direction);
+		}
+
+		$start = $this->config->itemsPerPage * ($this->currentPage - 1);
+
+		$this->queryBuilder
+			->setFirstResult($start)
+			->setMaxResults($this->config->itemsPerPage)
+		;
+
+		return $this->queryBuilder;
+	}
+
 	/**
+	 * @uses Doctrine\ORM\Tools\Pagination\Paginator If $usingDoctrinePaginator is TRUE (see † note below)
+	 *
+	 * @param bool $usingDoctrinePaginator Whether to use Doctrine's `Paginator` class to perform the actual database queries†
+	 *
+	 * † If the query includes one-to-many or many-to-many fetch-joins, the Doctrine `Paginator` will ensure that you end up with
+	 *   the expected results for a given page. Note, however, that using it means the `->finalize()` method (if your paginator
+	 *   class defines it) will instead be called immediately before any database queries have occurred.
+	 *
 	 * @throws \OutOfBoundsException If the requested page number is outside of the possible range
 	 */
-	final public function handleRequest(Request $request): void
+	final public function handleRequest(Request $request, bool $usingDoctrinePaginator = false): void
 	{
 		if( $this->appliedFilters === null ) {
 			$this->appliedFilters = 0;
@@ -256,47 +286,33 @@ abstract class ItemPaginator
 
 		$this->firstPage = 1;
 
-		if( !$this->calculatedItemTotalAndPageCount ) {
-			$countQB = clone $this->getQueryBuilder();
-
-			$countQB->select(sprintf('COUNT(%s.%s)', $this->entityAlias, $this->countProperty));
-
-			$this->itemTotal = $countQB->getQuery()->getSingleScalarResult();
-			$this->lastPage = $this->itemTotal > $this->config->itemsPerPage ? (int) ceil($this->itemTotal / $this->config->itemsPerPage) : $this->firstPage;
-
-			$this->calculatedItemTotalAndPageCount = true;
-		}
-
 		if( $request->query->has($this->config->pageRequestQuery) ) {
 			$this->currentPage = $request->query->getInt($this->config->pageRequestQuery);
 		} else {
 			$this->currentPage = $this->firstPage;
 		}
 
+		if( $usingDoctrinePaginator ) {
+			$doctrinePaginator = new Paginator($this->getFinalizedQueryBuilder());
+
+			$this->itemTotal = count($doctrinePaginator);
+			$this->items = $doctrinePaginator->getIterator();
+		} else {
+			$countQB = clone $this->queryBuilder;
+
+			$countQB->select(sprintf('COUNT(%s.%s)', $this->entityAlias, $this->countProperty));
+
+			$this->itemTotal = $countQB->getQuery()->getSingleScalarResult();
+			$this->items = $this->getFinalizedQueryBuilder()->getQuery()->getResult();
+		}
+
+		$this->lastPage = $this->itemTotal > $this->config->itemsPerPage ? (int) ceil($this->itemTotal / $this->config->itemsPerPage) : $this->firstPage;
+
 		if( $this->currentPage < $this->firstPage || $this->currentPage > $this->lastPage ) {
 			throw new \OutOfBoundsException(sprintf('The requested page number (%d) is outside of the possible range (%d-%d).', $this->currentPage, $this->firstPage, $this->lastPage));
 		}
 
-		$this->finalize();
-
-		$queryBuilder = $this->getQueryBuilder();
-
-		foreach( $this->selectStatements as $selectStatement ) {
-			$queryBuilder->addSelect($selectStatement);
-		}
-
-		foreach( $this->orderByProps as $propName => $direction ) {
-			$queryBuilder->addOrderBy($propName, $direction);
-		}
-
-		$start = $this->config->itemsPerPage * ($this->currentPage - 1);
-
-		$queryBuilder
-			->setFirstResult($start)
-			->setMaxResults($this->config->itemsPerPage)
-		;
-
-		$this->items = $queryBuilder->getQuery()->getResult();
+		$this->calculatedItemTotalAndPageCount = true;
 	}
 
 	final public function hasItems(): bool
