@@ -300,7 +300,28 @@ class ExampleController extends AbstractController
 }
 ```
 
-If you have created a form to go with your filter(s), you can incorporate it into your controller action like this:
+If your query includes one-to-many or many-to-many fetch-joins, you should opt-in to using Doctrine's own `Paginator` tool by setting the second argument of `->handleRequest()` to `true`; this will ensure that you get the expected items on each page (see <https://www.doctrine-project.org/projects/doctrine-orm/en/current/tutorials/pagination.html> for more information):
+
+```php
+<?php
+
+/* ... */
+
+    public function index(Request $request, ItemPaginatorFactory $paginatorFactory): Response
+    {
+        /* ... */
+
+        try {
+            $paginator->handleRequest($request, true); // Use Doctrine Paginator to perform the actual database queries
+        } catch( \OutOfBoundsException $e ) {
+            throw $this->createNotFoundException($e->getMessage());
+        }
+
+        /* ... */
+    }
+```
+
+If you have created a form to go with your filter(s) (see step 2B above), you can incorporate it into your controller action like this:
 
 ```php
 <?php
@@ -322,11 +343,11 @@ use App\Form\Type\ExampleFilterForm;
         return $this->render('index.html.twig', [
             'paginator' => $paginator,
             'filter_form' => $filterForm
-        ]); // ^^^^ Add a parameter for the form to the template context
+        ]); // ^^^^ Add a parameter to the template context for the form
     }
 ```
 
-Note: The standard Symfony form methods for checking submission/validation (i.e. `->isSubmitted()` and `->isValid()`) are not needed here because nothing is modified in the database.
+Note: The standard Symfony form methods for checking submission/validation (i.e. `->isSubmitted()` and `->isValid()`) are not necessary here because nothing is modified in the database.
 
 Step 4: Add pagination to a template
 -----------------------------------------------
@@ -369,7 +390,7 @@ To output a filter form, include this bundle's form template:
         {# ... #}
 ```
 
-The filter form template (`@WHItemPaginator/filter_form.html.twig`) requires the context parameter `filter_form`, which must be the `Symfony\Component\Form\FormView` instance representing your form (note: Symfony builds the form view for you automatically whenever a form has been added as a context parameter for a template). As with the paginator example above, if such a parameter is named something different within your template's context, make sure to specify it when including the filter form template:
+The filter form template (`@WHItemPaginator/filter_form.html.twig`) requires the context parameter `filter_form`, which must be the `Symfony\Component\Form\FormView` instance representing your form (note: Symfony builds the form view for you automatically whenever a controller action adds a form as a template context parameter). As with the paginator example above, if such a parameter is named something different within your template's context, make sure to specify it when including the filter form template:
 
 ```twig
     {{~ include('@WHItemPaginator/filter_form.html.twig', {filter_form: my_form_parameter}) }}
