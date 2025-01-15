@@ -327,6 +327,9 @@ abstract class ItemPaginator
 
 	/**
 	 * Retrieve the number of active filters for the current request; this will always return 0 before `->handleRequest()` has been called.
+	 *
+	 * Note that calling this method is most likely redundant (b/c it will always return ≥1) if any filter used with this paginator always
+	 * returns TRUE from its `->isApplicable()` method.
 	 */
 	final public function getActiveFiltersCount(): int
 	{
