@@ -12,6 +12,8 @@ class ItemSearchFilter implements ItemFilter, HasRequestQuery
 {
 	use IsApplicableRequestQueryTrait;
 
+	public const REQUEST_QUERY = 'search';
+
 	protected bool $requireNotEmpty = true;
 
 	public function __construct(protected readonly array $searchColumns)
@@ -26,7 +28,7 @@ class ItemSearchFilter implements ItemFilter, HasRequestQuery
 	 */
 	public function getRequestQueryName(): string
 	{
-		return 'search';
+		return self::REQUEST_QUERY;
 	}
 
 	/**
