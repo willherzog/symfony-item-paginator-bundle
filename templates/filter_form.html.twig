@@ -1,6 +1,6 @@
 		{{~ form_start(filter_form, attribute_overrides|default({id: 'item-filters'})) }}
-		{{~ form_rest(filter_form) }}
+		{{~ form_rest(filter_form) -}}
 			<div class="form-action">
 				<button type="submit">{{ 'action.generic.filter'|trans }}</button>
 			</div>
-		{{- form_end(filter_form) }}
+		{{~ form_end(filter_form) }}
