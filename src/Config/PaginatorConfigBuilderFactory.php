@@ -14,7 +14,7 @@ final class PaginatorConfigBuilderFactory
 		private readonly array $shortcutKeys
 	) {}
 
-	public function createBuilder(int $itemsPerPage = null): PaginatorConfigBuilder
+	public function createBuilder(?int $itemsPerPage = null): PaginatorConfigBuilder
 	{
 		return new PaginatorConfigBuilder(
 			$this->pageRequestQuery,

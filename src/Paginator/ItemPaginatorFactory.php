@@ -13,7 +13,7 @@ class ItemPaginatorFactory
 		protected readonly PaginatorConfigBuilderFactory $configBuilderFactory
 	) {}
 
-	public function create(string $class, PaginatorConfigBuilder $configBuilder = null): ItemPaginator
+	public function create(string $class, ?PaginatorConfigBuilder $configBuilder = null): ItemPaginator
 	{
 		if( !class_exists($class) ) {
 			throw new \InvalidArgumentException(sprintf('Class "%s" does not exist.', $class));
