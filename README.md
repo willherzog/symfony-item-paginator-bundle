@@ -273,6 +273,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{Request,Response};
 
+use WHSymfony\WHItemPaginatorBundle\Exception\OutOfPaginationRangeException;
 use WHSymfony\WHItemPaginatorBundle\Paginator\ItemPaginatorFactory;
 
 use App\Pagination\ExampleItemPaginator;
@@ -289,8 +290,8 @@ class ExampleController extends AbstractController
 
         try {
             $paginator->handleRequest($request);
-        } catch( \OutOfBoundsException $e ) { // This exception is thrown if the page number is outside of the possible range
-            throw $this->createNotFoundException($e->getMessage());
+        } catch( OutOfPaginationRangeException $e ) { // This exception is thrown if the page number is outside of the possible range
+            throw $this->createNotFoundException($e->getMessage(), $e);
         }
 
         return $this->render('index.html.twig', [
@@ -313,8 +314,8 @@ If your query includes one-to-many or many-to-many fetch-joins, you should opt-i
 
         try {
             $paginator->handleRequest($request, true); // Use Doctrine Paginator to perform the actual database queries
-        } catch( \OutOfBoundsException $e ) {
-            throw $this->createNotFoundException($e->getMessage());
+        } catch( OutOfPaginationRangeException $e ) {
+            throw $this->createNotFoundException($e->getMessage(), $e);
         }
 
         /* ... */
