@@ -6,6 +6,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 use WHSymfony\WHItemPaginatorBundle\Config\{PaginatorConfigBuilder,PaginatorConfigBuilderFactory};
 
+/**
+ * @author Will Herzog <willherzog@gmail.com>
+ */
 class ItemPaginatorFactory
 {
 	public function __construct(
