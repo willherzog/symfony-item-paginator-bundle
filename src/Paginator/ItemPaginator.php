@@ -10,6 +10,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
 use WHSymfony\WHItemPaginatorBundle\Config\PaginatorConfig;
+use WHSymfony\WHItemPaginatorBundle\Exception\OutOfPaginationRangeException;
 use WHSymfony\WHItemPaginatorBundle\Filter\ItemFilter;
 use WHSymfony\WHItemPaginatorBundle\Filter\{HasDefaultValue,HasRequestQuery};
 use WHSymfony\WHItemPaginatorBundle\Util\StringUtil;
@@ -268,7 +269,7 @@ abstract class ItemPaginator
 	 *   the expected results for a given page. Note, however, that using it means the `->finalize()` method (if your paginator
 	 *   class defines it) will instead be called immediately before any database queries have occurred.
 	 *
-	 * @throws \OutOfBoundsException If the requested page number is outside of the possible range
+	 * @throws OutOfPaginationRangeException If the requested page number is outside of the possible range
 	 */
 	final public function handleRequest(Request $request, bool $usingDoctrinePaginator = false): void
 	{
@@ -309,7 +310,7 @@ abstract class ItemPaginator
 		$this->lastPage = $this->itemTotal > $this->config->itemsPerPage ? (int) ceil($this->itemTotal / $this->config->itemsPerPage) : $this->firstPage;
 
 		if( $this->currentPage < $this->firstPage || $this->currentPage > $this->lastPage ) {
-			throw new \OutOfBoundsException(sprintf('The requested page number (%d) is outside of the possible range (%d-%d).', $this->currentPage, $this->firstPage, $this->lastPage));
+			throw new OutOfPaginationRangeException($this->currentPage, $this->firstPage, $this->lastPage);
 		}
 
 		$this->calculatedItemTotalAndPageCount = true;
