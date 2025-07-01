@@ -21,14 +21,14 @@ trait IsApplicableRequestQueryTrait
 	// protected bool $requireArray = true;
 
 	/**
-	 * Value from request query, which will be set by this trait's ->isApplicable() method.
+	 * Value from request query, which will be set by this trait's `->isApplicable()` method.
 	 */
 	protected mixed $requestQueryValue = null;
 
 	/**
 	 * @inheritDoc
 	 */
-	public function isApplicable(Request $request): bool
+	final public function isApplicable(Request $request): bool
 	{
 		if( !($this instanceof HasRequestQuery) ) {
 			throw new \LogicException(sprintf('This trait can only be used with an ItemFilter class implementing %s.', HasRequestQuery::class));
