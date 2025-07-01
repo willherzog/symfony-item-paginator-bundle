@@ -187,7 +187,7 @@ _It is recommended to use the above methods_ (instead of the QueryBuilder API) _
 
 With custom filters you can also implement one or both of the interfaces `WHSymfony\WHItemPaginatorBundle\Filter\HasRequestQuery`** and/or `WHSymfony\WHItemPaginatorBundle\Filter\HasDefaultValue` to improve interoperability with filter forms.
 
-_** If implementing this interface, you can use the trait `WHSymfony\WHItemPaginatorBundle\Filter\IsApplicableRequestQueryTrait` for defining the `->isApplicable()` method that is required for all filters._
+_** If using this interface, you can extend from `WHSymfony\WHItemPaginatorBundle\Filter\AbstractRequestQueryFilter`, which provides a default implemenation of the `->isApplicable()` method that is required for all filters._
 
 (Optional) Step 2B: Create filter form(s)
 -----------------------------------------
