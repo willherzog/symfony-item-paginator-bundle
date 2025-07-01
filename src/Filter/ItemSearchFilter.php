@@ -9,6 +9,8 @@ use WHSymfony\WHItemPaginatorBundle\Paginator\SearchableItemPaginator;
 use WHSymfony\WHItemPaginatorBundle\Exception\InvalidFilterParameterException;
 
 /**
+ * @throws InvalidFilterParameterException When creating an instance with an empty array
+ *
  * @author Will Herzog <willherzog@gmail.com>
  */
 class ItemSearchFilter extends AbstractRequestQueryFilter

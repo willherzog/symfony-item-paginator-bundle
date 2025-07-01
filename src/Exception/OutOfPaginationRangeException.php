@@ -5,7 +5,7 @@ namespace WHSymfony\WHItemPaginatorBundle\Exception;
 /**
  * @author Will Herzog <willherzog@gmail.com>
  */
-class OutOfPaginationRangeException extends \OutOfBoundsException
+class OutOfPaginationRangeException extends \OutOfBoundsException implements ItemPaginatorException
 {
 	public function __construct(int $currentPage, int $firstPage, int $lastPage, int $code = 0, \Throwable|null $previous = null)
 	{
