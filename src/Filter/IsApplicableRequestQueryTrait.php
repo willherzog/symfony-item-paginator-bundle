@@ -5,6 +5,8 @@ namespace WHSymfony\WHItemPaginatorBundle\Filter;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * @deprecated Make your filter class extend from {@link AbstractRequestQueryFilter} instead.
+ *
  * A default implementation of ItemFilter::isApplicable() for filters implementing the HasRequestQuery interface.
  *
  * @author Will Herzog <willherzog@gmail.com>
