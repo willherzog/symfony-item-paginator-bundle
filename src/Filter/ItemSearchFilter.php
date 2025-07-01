@@ -23,24 +23,18 @@ class ItemSearchFilter implements ItemFilter, HasRequestQuery
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getRequestQueryName(): string
 	{
 		return self::REQUEST_QUERY;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function supports(ItemPaginator $paginator): bool
 	{
 		return $paginator instanceof SearchableItemPaginator;
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param ItemPaginator&SearchableItemPaginator $paginator
 	 */
 	public function apply(ItemPaginator $paginator): void
 	{
