@@ -14,7 +14,7 @@ trait IsApplicableRequestQueryTrait
 	// Set this property to TRUE to require the request query value to not be empty (instead of merely not NULL).
 	// protected bool $requireNotEmpty = true;
 
-	// Set this property to TRUE to require the request query value to be numeric.
+	// Set this property to TRUE to require the request query value to be numeric (no type conversion will be applied, however).
 	// protected bool $requireNumeric = true;
 
 	// Set this property to TRUE if the request query may have multiple values (this means $requestQueryValue will always be an array).
