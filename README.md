@@ -258,6 +258,34 @@ class ExampleFilterForm extends AbstractType
 }
 ```
 
+Or, if you still need to configure additional options, such as disabling validation, you can do the following:
+
+```php
+<?php
+
+/* ... */
+
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use WHSymfony\WHItemPaginatorBundle\Form\FilterFormOptionsTrait;
+
+class ExampleFilterForm extends AbstractType
+{
+    use FilterFormOptionsTrait {
+        configureOptions as configureFilterFormOptions;
+    }
+
+    /* ... */
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $this->configureFilterFormOptions($resolver);
+
+        $resolver->setDefault('validation_groups', false);
+    }
+}
+```
+
 See subsequent steps for how to make further use of filter forms.
 
 Step 3: Apply pagination in a controller
