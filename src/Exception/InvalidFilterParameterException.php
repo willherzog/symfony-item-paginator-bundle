@@ -2,6 +2,6 @@
 
 namespace WHSymfony\WHItemPaginatorBundle\Exception;
 
-class InvalidFilterParameterException extends \InvalidArgumentException implements ItemPaginatorException
+class InvalidFilterParameterException extends InvalidArgumentException
 {
 }

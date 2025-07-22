@@ -2,6 +2,8 @@
 
 namespace WHSymfony\WHItemPaginatorBundle\Config;
 
+use WHSymfony\WHItemPaginatorBundle\Exception\InvalidArgumentException;
+
 /**
  * @author Will Herzog <willherzog@gmail.com>
  */
@@ -50,14 +52,14 @@ final class PaginatorConfigBuilder
 	public function setDisplayOption(string $option, mixed $value): static
 	{
 		if( !key_exists($option, self::DISPLAY_OPTIONS) ) {
-			throw new \InvalidArgumentException(sprintf('"%s" is not one of the supported display options (these can be found in this class\'s DISPLAY_OPTIONS constant).', $option));
+			throw new InvalidArgumentException(sprintf('"%s" is not one of the supported display options (these can be found in this class\'s DISPLAY_OPTIONS constant).', $option));
 		}
 
 		$expectedType = self::DISPLAY_OPTIONS[$option];
 		$actualType = get_debug_type($value);
 
 		if( $actualType !== $expectedType ) {
-			throw new \InvalidArgumentException(sprintf('Expected value of type "%s" for display option "%s" but got "%s" instead.', $expectedType, $option, $actualType));
+			throw new InvalidArgumentException(sprintf('Expected value of type "%s" for display option "%s" but got "%s" instead.', $expectedType, $option, $actualType));
 		}
 
 		$this->displayOptions[$option] = $value;
@@ -68,11 +70,11 @@ final class PaginatorConfigBuilder
 	public function setShortcutKey(string $shortcut, string $key): static
 	{
 		if( !in_array($shortcut, self::SHORTCUT_KEYS, true) ) {
-			throw new \InvalidArgumentException(sprintf('"%s" is not one of the supported shortcut keys (these can be found in this class\'s SHORTCUT_KEYS constant).', $shortcut));
+			throw new InvalidArgumentException(sprintf('"%s" is not one of the supported shortcut keys (these can be found in this class\'s SHORTCUT_KEYS constant).', $shortcut));
 		}
 
 		if( strlen($key) !== 1 ) {
-			throw new \InvalidArgumentException('Shortcut key must a string with exactly 1 character.');
+			throw new InvalidArgumentException('Shortcut key must a string with exactly 1 character.');
 		}
 
 		$this->shortcutKeys[$shortcut] = $key;

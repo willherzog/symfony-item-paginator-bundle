@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 use WHSymfony\WHItemPaginatorBundle\Config\PaginatorConfig;
 use WHSymfony\WHItemPaginatorBundle\Exception\IncompatibleEntityManagerException;
+use WHSymfony\WHItemPaginatorBundle\Exception\InvalidArgumentException;
+use WHSymfony\WHItemPaginatorBundle\Exception\LogicException;
 use WHSymfony\WHItemPaginatorBundle\Exception\OutOfPaginationRangeException;
 use WHSymfony\WHItemPaginatorBundle\Filter\ItemFilter;
 use WHSymfony\WHItemPaginatorBundle\Filter\{HasDefaultValue,HasRequestQuery};
@@ -54,7 +56,7 @@ abstract class ItemPaginator
 		$this->selectStatements = [$this->entityAlias]; // i.e. the default select statement
 
 		if( !class_exists($this->entityClass) ) {
-			throw new \LogicException(sprintf('Entity class "%s" does not exist.', $this->entityClass));
+			throw new LogicException(sprintf('Entity class "%s" does not exist.', $this->entityClass));
 		}
 
 		$objectManager = $managerRegistry->getManagerForClass($this->entityClass);
@@ -120,11 +122,11 @@ abstract class ItemPaginator
 	final public function addFilter(ItemFilter $filter): static
 	{
 		if( $this->appliedFilters !== null ) {
-			throw new \LogicException('Filters have already been applied: filters can no longer be added.');
+			throw new LogicException('Filters have already been applied: filters can no longer be added.');
 		}
 
 		if( !$filter->supports($this) ) {
-			throw new \InvalidArgumentException(sprintf('Item filter of class "%s" cannot be used with item paginator of class "%s".', $filter::class, $this::class));
+			throw new InvalidArgumentException(sprintf('Item filter of class "%s" cannot be used with item paginator of class "%s".', $filter::class, $this::class));
 		}
 
 		$this->filters[] = $filter;
@@ -346,7 +348,7 @@ abstract class ItemPaginator
 	final public function getNumericActions(): array
 	{
 		if( !$this->calculatedItemTotalAndPageCount ) {
-			throw new \LogicException('This obect\'s ->handleRequest() method must be called first before calling this method.');
+			throw new LogicException('This obect\'s ->handleRequest() method must be called first before calling this method.');
 		}
 
 		$maxNumericActions = $this->config->displayOption['max_numeric_links'];

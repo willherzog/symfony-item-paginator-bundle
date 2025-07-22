@@ -4,6 +4,9 @@ namespace WHSymfony\WHItemPaginatorBundle\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
 
+use WHSymfony\WHItemPaginatorBundle\Exception\InvalidArgumentException;
+use WHSymfony\WHItemPaginatorBundle\Exception\LogicException;
+
 /**
  * A default implementation of SearchableItemPaginator.
  *
@@ -19,7 +22,7 @@ trait SearchableItemTrait
 		if( !is_array($columns) ) {
 			$columns = (array) $columns;
 		} elseif( empty($columns) ) {
-			throw new \BadMethodCallException('At least one search column must be specified.');
+			throw new LogicException('At least one search column must be specified.');
 		}
 
 		/** @var QueryBuilder */
@@ -30,7 +33,7 @@ trait SearchableItemTrait
 
 			foreach( $columns as $column ) {
 				if( empty($column) ) {
-					throw new \InvalidArgumentException('Search column name cannot be empty.');
+					throw new InvalidArgumentException('Search column name cannot be empty.');
 				}
 
 				$columnExpressions[] = $qb->expr()->like($this->entityAlias . '.' . $column, ':term');
@@ -41,7 +44,7 @@ trait SearchableItemTrait
 			$column = array_shift($columns);
 
 			if( empty($column) ) {
-				throw new \InvalidArgumentException('Search column name cannot be empty.');
+				throw new InvalidArgumentException('Search column name cannot be empty.');
 			}
 
 			$whereExpression = $qb->expr()->like($this->entityAlias . '.' . $column, ':term');
