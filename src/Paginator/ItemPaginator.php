@@ -10,6 +10,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
 use WHSymfony\WHItemPaginatorBundle\Config\PaginatorConfig;
+use WHSymfony\WHItemPaginatorBundle\Exception\IncompatibleEntityManagerException;
 use WHSymfony\WHItemPaginatorBundle\Exception\OutOfPaginationRangeException;
 use WHSymfony\WHItemPaginatorBundle\Filter\ItemFilter;
 use WHSymfony\WHItemPaginatorBundle\Filter\{HasDefaultValue,HasRequestQuery};
@@ -62,7 +63,7 @@ abstract class ItemPaginator
 		if( $objectManager instanceof EntityManagerInterface ) {
 			$this->entityManager = $objectManager;
 		} else {
-			throw new \RuntimeException(sprintf('Did not receive an instance of "%s" as the object manager for entity class "%s".', EntityManagerInterface::class, $this->entityClass));
+			throw new IncompatibleEntityManagerException($this->entityClass);
 		}
 
 		$this->queryBuilder = $this->entityManager->getRepository($this->entityClass)->createQueryBuilder($this->entityAlias);
