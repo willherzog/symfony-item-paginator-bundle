@@ -270,7 +270,7 @@ abstract class ItemPaginator
 	 *
 	 * † If the query includes one-to-many or many-to-many fetch-joins, the Doctrine `Paginator` will ensure that you end up with
 	 *   the expected results for a given page. Note, however, that using it means the `->finalize()` method (if your paginator
-	 *   class defines it) will instead be called immediately before any database queries have occurred.
+	 *   class defines one) will instead be called immediately *before* any database queries have occurred.
 	 *
 	 * @throws OutOfPaginationRangeException If the requested page number is outside of the possible range
 	 */
