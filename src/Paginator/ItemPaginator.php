@@ -241,7 +241,7 @@ abstract class ItemPaginator
 		return $filterData;
 	}
 
-	private function getFinalizedQueryBuilder(): QueryBuilder
+	private function finalizedQueryBuilder(): void
 	{
 		$this->finalize();
 
@@ -259,8 +259,6 @@ abstract class ItemPaginator
 			->setFirstResult($start)
 			->setMaxResults($this->config->itemsPerPage)
 		;
-
-		return $this->queryBuilder;
 	}
 
 	/**
@@ -268,9 +266,8 @@ abstract class ItemPaginator
 	 *
 	 * @param bool $usingDoctrinePaginator Whether to use Doctrine's `Paginator` class to perform the actual database queries†
 	 *
-	 * † If the query includes one-to-many or many-to-many fetch-joins, the Doctrine `Paginator` will ensure that you end up with
-	 *   the expected results for a given page. Note, however, that using it means the `->finalize()` method (if your paginator
-	 *   class defines one) will be called immediately *before* the count query is made (rather than immediately after).
+	 * † If the query includes one-to-many or many-to-many fetch-joins, the Doctrine `Paginator` will ensure you always end up
+	 *   with the expected results for a given page.
 	 *
 	 * @throws OutOfPaginationRangeException If the requested page number is outside of the possible range
 	 */
@@ -286,6 +283,8 @@ abstract class ItemPaginator
 					$this->appliedFilters++;
 				}
 			}
+
+			$this->finalizedQueryBuilder();
 		}
 
 		$this->firstPage = 1;
@@ -297,7 +296,7 @@ abstract class ItemPaginator
 		}
 
 		if( $usingDoctrinePaginator ) {
-			$doctrinePaginator = new Paginator($this->getFinalizedQueryBuilder());
+			$doctrinePaginator = new Paginator($this->queryBuilder);
 
 			$this->itemTotal = count($doctrinePaginator);
 			$this->items = $doctrinePaginator->getIterator();
@@ -307,7 +306,7 @@ abstract class ItemPaginator
 			$countQB->select(sprintf('COUNT(%s.%s)', $this->entityAlias, $this->countProperty));
 
 			$this->itemTotal = $countQB->getQuery()->getSingleScalarResult();
-			$this->items = $this->getFinalizedQueryBuilder()->getQuery()->getResult();
+			$this->items = $this->queryBuilder->getQuery()->getResult();
 		}
 
 		$this->lastPage = $this->itemTotal > $this->config->itemsPerPage ? (int) ceil($this->itemTotal / $this->config->itemsPerPage) : $this->firstPage;
