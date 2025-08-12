@@ -14,8 +14,9 @@ use WHSymfony\WHItemPaginatorBundle\Exception\IncompatibleEntityManagerException
 use WHSymfony\WHItemPaginatorBundle\Exception\InvalidArgumentException;
 use WHSymfony\WHItemPaginatorBundle\Exception\LogicException;
 use WHSymfony\WHItemPaginatorBundle\Exception\OutOfPaginationRangeException;
-use WHSymfony\WHItemPaginatorBundle\Filter\ItemFilter;
+use WHSymfony\WHItemPaginatorBundle\Filter\ExcludeFromActiveFiltersCount;
 use WHSymfony\WHItemPaginatorBundle\Filter\{HasDefaultValue,HasRequestQuery};
+use WHSymfony\WHItemPaginatorBundle\Filter\ItemFilter;
 use WHSymfony\WHItemPaginatorBundle\Util\StringUtil;
 
 /**
@@ -280,7 +281,9 @@ abstract class ItemPaginator
 				if( $filter->isApplicable($request) ) {
 					$filter->apply($this);
 
-					$this->appliedFilters++;
+					if( !($filter instanceof ExcludeFromActiveFiltersCount) ) {
+						$this->appliedFilters++;
+					}
 				}
 			}
 
@@ -331,7 +334,8 @@ abstract class ItemPaginator
 	/**
 	 * Retrieve the number of active filters for the current request (this will always be `0` prior to calling `->handleRequest()`).
 	 *
-	 * Note that the count could be misleading if any of the filters used always return `true` from their `->isApplicable()` methods.
+	 * Note that the count could be misleading if any of the filters used always return `true` from their `->isApplicable()` methods
+	 * (such filters can implement {@link WHSymfony\WHItemPaginatorBundle\Filter\ExcludeFromActiveFiltersCount} to prevent this).
 	 */
 	final public function getActiveFiltersCount(): int
 	{
