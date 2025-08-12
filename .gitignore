@@ -1,3 +1,4 @@
 /.vscode/
 /var/
 /vendor/
+composer.lock
