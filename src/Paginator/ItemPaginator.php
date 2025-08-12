@@ -286,8 +286,6 @@ abstract class ItemPaginator
 					}
 				}
 			}
-
-			$this->finalizedQueryBuilder();
 		}
 
 		$this->firstPage = 1;
@@ -296,6 +294,10 @@ abstract class ItemPaginator
 			$this->currentPage = $request->query->getInt($this->config->pageRequestQuery);
 		} else {
 			$this->currentPage = $this->firstPage;
+		}
+
+		if( !$this->calculatedItemTotalAndPageCount ) {
+			$this->finalizedQueryBuilder();
 		}
 
 		if( $usingDoctrinePaginator ) {
