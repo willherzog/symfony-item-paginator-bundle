@@ -85,8 +85,9 @@ abstract class ItemPaginator
 	abstract protected function getEntityAlias(): string;
 
 	/**
-	 * Get property on main entity to use for count queries.
-	 * Override this method if needed to return a property other than "id".
+	 * Get property on main entity to use for count queries; override this method to return a property other than "id".
+	 *
+	 * Note that this only has an affect if the `$usingDoctrinePaginator` argument is `false` when calling `->handleRequest()`.
 	 */
 	protected function getCountProperty(): string
 	{
@@ -101,7 +102,7 @@ abstract class ItemPaginator
 	}
 
 	/**
-	 * Called from `->handleRequest()` after filters have been applied.
+	 * Called once from `->handleRequest()` after filters have been applied.
 	 */
 	protected function finalize(): void
 	{
@@ -263,7 +264,7 @@ abstract class ItemPaginator
 	}
 
 	/**
-	 * @uses Doctrine\ORM\Tools\Pagination\Paginator If $usingDoctrinePaginator is TRUE (see † note below)
+	 * @uses Doctrine\ORM\Tools\Pagination\Paginator If `$usingDoctrinePaginator` is `true` (see † note below)
 	 *
 	 * @param bool $usingDoctrinePaginator Whether to use Doctrine's `Paginator` class to perform the actual database queries†
 	 *
