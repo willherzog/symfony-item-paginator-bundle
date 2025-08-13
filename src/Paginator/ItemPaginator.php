@@ -163,6 +163,8 @@ abstract class ItemPaginator
 	}
 
 	/**
+	 * @deprecated - use `addSelect()` instead.
+	 *
 	 * Set an item select statement; if none have been set, the main item entity is hydrated as a whole.
 	 */
 	final public function setSelect(string $selectStatement): static
@@ -174,35 +176,35 @@ abstract class ItemPaginator
 
 	private function normalizePropertyName(string $propName): string
 	{
-		if( !strpos($propName, '.') ) {
-			$propName = sprintf('%s.%s', $this->entityAlias, $propName);
-		}
-
-		return $propName;
-	}
-
-	private function getOrderByDirection(bool $ascending): string
-	{
-		return $ascending ? 'ASC' : 'DESC';
+		return !strpos($propName, '.') ? sprintf('%s.%s', $this->entityAlias, $propName) : $propName;
 	}
 
 	/**
 	 * Add to item order-by statements.
 	 *
 	 * @param string $propName Name of item property by which items should be sorted
-	 * @param bool $ascending Direction is ASC if TRUE, DESC if FALSE; defaults to TRUE
+	 * @param string|bool $direction Direction is "ASC" if `true`, "DESC" if `false`†; defaults to "ASC"
+	 *
+	 * † Using a boolean value for the $direction argument is deprecated and will no longer be supported in the future.
+	 *
+	 * @throws InvalidArgumentException If $direction is neither boolean nor one of "ASC" or "DESC" (case is ignored for this)
 	 */
-	final public function addOrderBy(string $propName, bool $ascending = true): static
+	final public function addOrderBy(string $propName, string|bool $direction = 'ASC'): static
 	{
-		$propName = $this->normalizePropertyName($propName);
-		$direction = $this->getOrderByDirection($ascending);
+		if( $direction === true || $direction === false ) {
+			$direction = $direction ? 'ASC' : 'DESC';
+		} elseif( in_array(strtoupper($direction), ['ASC','DESC'], true) ) {
+			throw new InvalidArgumentException('"%s" is not a valid order-by direction.', $direction);
+		}
 
-		$this->orderByProps[$propName] = $direction;
+		$this->orderByProps[$this->normalizePropertyName($propName)] = $direction;
 
 		return $this;
 	}
 
 	/**
+	 * @deprecated - use `addOrderBy()` instead.
+	 *
 	 * Set an item order-by statement.
 	 *
 	 * @param string $propName Name of item property by which items should be sorted
@@ -211,9 +213,7 @@ abstract class ItemPaginator
 	final public function setOrderBy(string $propName, bool $ascending = true): static
 	{
 		$propName = $this->normalizePropertyName($propName);
-		$direction = $this->getOrderByDirection($ascending);
-
-		$this->orderByProps = [$propName => $direction];
+		$this->orderByProps = [$propName => $ascending ? 'ASC' : 'DESC'];
 
 		return $this;
 	}
