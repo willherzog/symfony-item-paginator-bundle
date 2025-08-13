@@ -163,7 +163,7 @@ abstract class ItemPaginator
 	}
 
 	/**
-	 * @deprecated - use `addSelect()` instead.
+	 * @deprecated use `addSelect()` instead.
 	 *
 	 * Set an item select statement; if none have been set, the main item entity is hydrated as a whole.
 	 */
@@ -203,7 +203,7 @@ abstract class ItemPaginator
 	}
 
 	/**
-	 * @deprecated - use `addOrderBy()` instead.
+	 * @deprecated use `addOrderBy()` instead.
 	 *
 	 * Set an item order-by statement.
 	 *
