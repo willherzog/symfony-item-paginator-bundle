@@ -194,7 +194,7 @@ abstract class ItemPaginator
 		if( $direction === true || $direction === false ) {
 			$direction = $direction ? 'ASC' : 'DESC';
 		} elseif( in_array(strtoupper($direction), ['ASC','DESC'], true) ) {
-			throw new InvalidArgumentException('"%s" is not a valid order-by direction.', $direction);
+			throw new InvalidArgumentException(sprintf('"%s" is not a valid order-by direction.', $direction));
 		}
 
 		$this->orderByProps[$this->normalizePropertyName($propName)] = $direction;
