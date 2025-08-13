@@ -242,7 +242,7 @@ abstract class ItemPaginator
 		return $filterData;
 	}
 
-	private function finalizedQueryBuilder(): void
+	private function finalizeQueryBuilder(): void
 	{
 		$this->finalize();
 
@@ -297,7 +297,7 @@ abstract class ItemPaginator
 		}
 
 		if( !$this->calculatedItemTotalAndPageCount ) {
-			$this->finalizedQueryBuilder();
+			$this->finalizeQueryBuilder();
 		}
 
 		if( $usingDoctrinePaginator ) {
