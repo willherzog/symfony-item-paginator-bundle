@@ -176,14 +176,8 @@ _\* Besides using the QueryBuilder API directly, paginator classes have some add
 
 /** @var ItemPaginator $paginator */
 $paginator->addSelect(); // Add an entity property name to the item select statements
-$paginator->setSelect(); // Set an entity property name for the item select statement*
-$paginator->addOrderBy(); // Add an entity property name to the item order-by statements (using ascending order unless second argument is FALSE)
-$paginator->setOrderBy(); // Set an entity property name for the item order-by statement* (using ascending order unless second argument is FALSE)
-
-// * Overwrites any previous ones
+$paginator->addOrderBy(); // Add an entity property name to the item order-by statements (defaults to using ascending order)
 ```
-
-_It is recommended to use the above methods_ (instead of the QueryBuilder API) _when altering select and/or order-by statements._
 
 With custom filters you can also implement one or both of the interfaces `WHSymfony\WHItemPaginatorBundle\Filter\HasRequestQuery`** and/or `WHSymfony\WHItemPaginatorBundle\Filter\HasDefaultValue` to improve interoperability with filter forms.
 
