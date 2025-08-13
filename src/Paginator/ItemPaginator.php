@@ -176,7 +176,7 @@ abstract class ItemPaginator
 
 	private function normalizePropertyName(string $propName): string
 	{
-		return !strpos($propName, '.') ? sprintf('%s.%s', $this->entityAlias, $propName) : $propName;
+		return strpos($propName, '.') ? $propName : sprintf('%s.%s', $this->entityAlias, $propName);
 	}
 
 	/**
