@@ -193,7 +193,7 @@ abstract class ItemPaginator
 	{
 		if( $direction === true || $direction === false ) {
 			$direction = $direction ? 'ASC' : 'DESC';
-		} elseif( in_array(strtoupper($direction), ['ASC','DESC'], true) ) {
+		} elseif( !in_array(strtoupper($direction), ['ASC','DESC'], true) ) {
 			throw new InvalidArgumentException(sprintf('"%s" is not a valid order-by direction.', $direction));
 		}
 
