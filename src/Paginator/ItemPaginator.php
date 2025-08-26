@@ -309,6 +309,8 @@ abstract class ItemPaginator
 		} else {
 			$countQB = clone $this->queryBuilder;
 
+			$countQB->setFirstResult(null)->setMaxResults(null);
+
 			$countQB->select(sprintf('COUNT(%s.%s)', $this->entityAlias, $this->countProperty));
 
 			$this->itemTotal = $countQB->getQuery()->getSingleScalarResult();
