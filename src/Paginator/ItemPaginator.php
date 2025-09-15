@@ -153,7 +153,7 @@ abstract class ItemPaginator
 	}
 
 	/**
-	 * Add to item select statements; if none are added, the main item entity is hydrated as a whole.
+	 * Add to item select statements (if none are added, the main item entity is hydrated as a whole).
 	 */
 	final public function addSelect(string $selectStatement): static
 	{
@@ -165,7 +165,7 @@ abstract class ItemPaginator
 	/**
 	 * @deprecated use `addSelect()` instead.
 	 *
-	 * Set an item select statement; if none have been set, the main item entity is hydrated as a whole.
+	 * Set an item select statement (if none have been set, the main item entity is hydrated as a whole).
 	 */
 	final public function setSelect(string $selectStatement): static
 	{
