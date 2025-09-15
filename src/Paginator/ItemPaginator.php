@@ -154,10 +154,17 @@ abstract class ItemPaginator
 
 	/**
 	 * Add to item select statements (if none are added, the main item entity is hydrated as a whole).
+	 *
+	 * @param string $selectStatement The selection expression
+	 * @param bool $replacePrevious Whether to erase previous select statements (does not affect ones added directly to the query builder)
 	 */
-	final public function addSelect(string $selectStatement): static
+	final public function addSelect(string $selectStatement, bool $replacePrevious = false): static
 	{
-		$this->selectStatements[] = $selectStatement;
+		if( $replacePrevious ) {
+			$this->selectStatements = [$selectStatement];
+		} else {
+			$this->selectStatements[] = $selectStatement;
+		}
 
 		return $this;
 	}
@@ -184,20 +191,27 @@ abstract class ItemPaginator
 	 *
 	 * @param string $propName Name of item property by which items should be sorted
 	 * @param string|bool $direction Direction is "ASC" if `true`, "DESC" if `false`†; defaults to "ASC"
+	 * @param bool $replacePrevious Whether to erase previous order-by statements (does not affect ones added directly to the query builder)
 	 *
 	 * † Using a boolean value for the $direction argument is deprecated and will no longer be supported in the future.
 	 *
 	 * @throws InvalidArgumentException If $direction is neither boolean nor one of "ASC" or "DESC" (case is ignored for this)
 	 */
-	final public function addOrderBy(string $propName, string|bool $direction = 'ASC'): static
+	final public function addOrderBy(string $propName, string|bool $direction = 'ASC', bool $replacePrevious = false): static
 	{
+		$propName = $this->normalizePropertyName($propName);
+
 		if( $direction === true || $direction === false ) {
 			$direction = $direction ? 'ASC' : 'DESC';
 		} elseif( !in_array(strtoupper($direction), ['ASC','DESC'], true) ) {
 			throw new InvalidArgumentException(sprintf('"%s" is not a valid order-by direction.', $direction));
 		}
 
-		$this->orderByProps[$this->normalizePropertyName($propName)] = $direction;
+		if( $replacePrevious ) {
+			$this->orderByProps = [$propName => $direction];
+		} else {
+			$this->orderByProps[$propName] = $direction;
+		}
 
 		return $this;
 	}
