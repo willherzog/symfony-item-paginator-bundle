@@ -17,7 +17,9 @@
 {% if any_available or display_item_total %}
 		<nav class="pagination"{% if ajax_only %} data-query-name="{{ paginator.config.pageRequestQuery }}"{% endif %}>
 	{%~ if display_item_total %}
-		{%~ set item_total_label = paginator.itemTotalLabel ?? 'pagination.item_total' %}
+		{%~ if item_total_label is not defined %}
+			{%~ set item_total_label = paginator.itemTotalLabel ?? 'pagination.item_total' %}
+		{%~ endif %}
 			<span class="item-total">{{ item_total_label|trans({count: paginator.itemTotal}) }}</span>
 	{%~ endif %}
 	{%~ if any_available %}
