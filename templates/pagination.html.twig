@@ -53,12 +53,15 @@
 				{{~ include(action_template, {action_class: 'goto-page', action_goto: page_num}) -}}
 			{%~ endif %}
 		  {%~ endfor %}
+		{%~ elseif display_current_page and display_page_count %}
+			<span class="current-page-wrapper">
+				<span class="current-page">{{ paginator.currentPage }}</span>
+				{{ paginator.config.displayOption['separator'] }}
+				<span class="page-count">{{ paginator.lastPage }}</span>
+			</span>
 		{%~ else %}
 			{%~ if display_current_page %}
 			<span class="current-page">{{ paginator.currentPage }}</span>
-			{%~ endif %}
-			{%~ if display_current_page and display_page_count %}
-			{{ paginator.config.displayOption['separator'] }}
 			{%~ endif %}
 			{%~ if display_page_count %}
 			<span class="page-count">{{ paginator.lastPage }}</span>
