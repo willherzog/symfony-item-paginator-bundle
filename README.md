@@ -471,3 +471,45 @@ Config descriptions
 `wh_paginator.display_options.separator` _(string)_: String to output, if any, between the current page number and the total page count.
 
 `wh_paginator.shortcut_keys` _(previous/next/first/last, string)_: Shortcut key (should be a single character on the keyboard) to use with each of the previous/next/first/last actions.
+
+Using the config builder
+------------------------
+
+The configuration can be overridden on a case-by-case basis using the config builder feature.
+
+```php
+<?php
+
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\{Request,Response};
+
+use WHSymfony\WHItemPaginatorBundle\Config\PaginatorConfigBuilderFactory;
+use WHSymfony\WHItemPaginatorBundle\Paginator\ItemPaginatorFactory;
+
+use App\Pagination\ExampleItemPaginator;
+
+class ExampleController extends AbstractController
+{
+    public function index(
+        Request $request,
+        ItemPaginatorFactory $paginatorFactory,
+        PaginatorConfigBuilderFactory $configBuilderFactory
+    ): Response
+    {
+        // The addition of PaginatorConfigBuilderFactory is the key difference here from Step 3 (above)
+        // For convenience, the items per page can optionally be set when creating the builder
+        $configBuilder = $configBuilderFactory->createBuilder(25);
+
+        // $configBuilder will be an instance of WHSymfony\WHItemPaginatorBundle\Config\PaginatorConfigBuilder
+        // See this class for all its callable methods
+        // Any of this library's config values can be overridden using this object
+        $configBuilder->setDisplayOption('symbol_based_labels', false);
+
+        $paginator = $paginatorFactory->create(ExampleItemPaginator::class, $configBuilder);
+
+        /* ... */
+    }
+}
+```
